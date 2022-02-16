@@ -1,0 +1,29 @@
+{
+    "pickaxes": [
+        {
+            "type": "Wood",
+            "durability": 59,
+            "speed": 20
+        },
+        {
+            "type": "Stone",
+            "durability": 131,
+            "speed": 40
+        },
+        {
+            "type": "Iron",
+            "durability": 250,
+            "speed": 60
+        },
+        {
+            "type": "Diamond",
+            "durability": 1561,
+            "speed": 75
+        },
+        {
+            "type": "Gold",
+            "durability": 32,
+            "speed": 120
+        }
+    ]
+}
