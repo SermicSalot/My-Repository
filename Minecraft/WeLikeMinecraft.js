@@ -352,7 +352,7 @@ class Minecraft {
                 case 'Enchanting Helmet':
                     choice = parseInt(str);
                     if (!isNaN(choice)) {
-                        //TODO this.enchant(msg, 'Helmet', choice - 1);
+                        this.enchant(msg, 'Helmet', choice - 1);
                     }
                     else {
                         this.unexpectedResponse(msg);
@@ -361,7 +361,7 @@ class Minecraft {
                 case 'Enchanting Chestplate':
                     choice = parseInt(str);
                     if (!isNaN(choice)) {
-                        //TODO this.enchant(msg, 'Chestplate', choice - 1);
+                        this.enchant(msg, 'Chestplate', choice - 1);
                     }
                     else {
                         this.unexpectedResponse(msg);
@@ -370,7 +370,7 @@ class Minecraft {
                 case 'Enchanting Leggings':
                     choice = parseInt(str);
                     if (!isNaN(choice)) {
-                        //TODO this.enchant(msg, 'Leggings', choice - 1);
+                        this.enchant(msg, 'Leggings', choice - 1);
                     }
                     else {
                         this.unexpectedResponse(msg);
@@ -379,7 +379,7 @@ class Minecraft {
                 case 'Enchanting Boots':
                     choice = parseInt(str);
                     if (!isNaN(choice)) {
-                        //TODO this.enchant(msg, 'Boots', choice - 1);
+                        this.enchant(msg, 'Boots', choice - 1);
                     }
                     else {
                         this.unexpectedResponse(msg);
@@ -388,7 +388,7 @@ class Minecraft {
                 case 'Enchanting Pick':
                     choice = parseInt(str);
                     if (!isNaN(choice)) {
-                        //TODO this.enchant(msg, 'Pick', choice - 1);
+                        this.enchant(msg, 'Pick', choice - 1);
                     }
                     else {
                         this.unexpectedResponse(msg);
@@ -397,7 +397,7 @@ class Minecraft {
                 case 'Enchanting Sword':
                     choice = parseInt(str);
                     if (!isNaN(choice)) {
-                        //TODO this.enchant(msg, 'Sword', choice - 1);
+                        this.enchant(msg, 'Sword', choice - 1);
                     }
                     else {
                         this.unexpectedResponse(msg);
@@ -1104,11 +1104,15 @@ class Minecraft {
                     }
                 });
                 this.saveData.players[playerIndex].inventory.picks[pickIndex].enchants.forEach((enchant) => {
-                    this.enchants.PickEnchants.forEach((possible_enchant) => {
-                        if (possible_enchant.type === enchant) {
-                            blocks2Mine *= possible_enchant.durabilityMod;
-                            treasureMod *= possible_enchant.treasureMod;
-                            speed *= possible_enchant.speedMod;
+                    this.enchants.PickEnchants.forEach((enchantType) => {
+                        if (enchant.startsWith(enchantType.type)) {
+                            enchantType.levels.forEach((level) => {
+                                if (level.type === enchant) {
+                                    blocks2Mine *= possible_enchant.durabilityMod;
+                                    treasureMod *= possible_enchant.treasureMod;
+                                    speed *= possible_enchant.speedMod;
+                                }
+                            });
                         }
                     });
                 });
@@ -1836,6 +1840,143 @@ class Minecraft {
             }
             this.save(this.saveData);
         }
+    }
+    enchant(msg, equipment, index) {
+        this.load();
+        let playerIndex = this.saveData.players.findIndex((player) => player.id === msg.author.id);
+        if (playerIndex === -1) {
+            msg.channel.send(`<@265567107280797696>, we got a big problem here. In enchant.`);
+        }
+        else{
+            switch (equipment) {
+                case 'Helmet':
+                    if (index + 1 > this.saveData.players[playerIndex].inventory.helmets.length || index < 0) {
+                        msg.channel.send(`${msg.author.username}, that helmet doesn't exist! Try Again.`);
+                        this.displayHelmets(msg);
+                    }
+                    else if (this.saveData.players[playerIndex].inventory.helmets[index].enchants.length > 0) {
+                        msg.channel.send(`${msg.author.username}, that helmet is already enchanted. Try a different helmet.`);
+                        this.displayHelmets(msg);
+                    }
+                    else {
+                        this.saveData.players[playerIndex].inventory.helmets[index].enchants.push(...this.getEnchantments('HelmetEnchants'));
+                        msg.channel.send(`${msg.author.username}, you enchanted your ${this.saveData.players[playerIndex].inventory.helmets[index].type} Helmet with the following:\n${this.saveData.players[playerIndex].inventory.helmets[index].enchants.join(', ')}`);
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    break;
+                case 'Chestplate':
+                    if (index + 1 > this.saveData.players[playerIndex].inventory.chestplates.length || index < 0) {
+                        msg.channel.send(`${msg.author.username}, that chestplate doesn't exist! Try Again.`);
+                        this.displayChestplates(msg);
+                    }
+                    else if (this.saveData.players[playerIndex].inventory.chestplate[index].enchants.length > 0) {
+                        msg.channel.send(`${msg.author.username}, that chestplate is already enchanted. Try a different chestplate.`);
+                        this.displayChestplates(msg);
+                    }
+                    else {
+                        this.saveData.players[playerIndex].inventory.chestplates[index].enchants.push(...this.getEnchantments('ChestplateEnchants'));
+                        msg.channel.send(`${msg.author.username}, you enchanted your ${this.saveData.players[playerIndex].inventory.chestplates[index].type} Chestplate with the following:\n${this.saveData.players[playerIndex].inventory.chestplates[index].enchants.join(', ')}`);
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    break;
+                case 'Leggings':
+                    if (index + 1 > this.saveData.players[playerIndex].inventory.leggings.length || index < 0) {
+                        msg.channel.send(`${msg.author.username}, those leggings don't exist! Try Again.`);
+                        this.displayLeggings(msg);
+                    }
+                    else if (this.saveData.players[playerIndex].inventory.leggings[index].enchants.length > 0) {
+                        msg.channel.send(`${msg.author.username}, those leggings are already enchanted. Try different leggings.`);
+                        this.displayLeggings(msg);
+                    }
+                    else {
+                        this.saveData.players[playerIndex].inventory.leggings[index].enchants.push(...this.getEnchantments('LeggingEnchants'));
+                        msg.channel.send(`${msg.author.username}, you enchanted your ${this.saveData.players[playerIndex].inventory.leggings[index].type} Leggings with the following:\n${this.saveData.players[playerIndex].inventory.leggings[index].enchants.join(', ')}`);
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    break;
+                case 'Boots':
+                    if (index + 1 > this.saveData.players[playerIndex].inventory.boots.length || index < 0) {
+                        msg.channel.send(`${msg.author.username}, those boots don't exist! Try Again.`);
+                        this.displayBoots(msg);
+                    }
+                    else if (this.saveData.players[playerIndex].inventory.boots[index].enchants.length > 0) {
+                        msg.channel.send(`${msg.author.username}, those boots are already enchanted. Try different boots.`);
+                        this.displayBoots(msg);
+                    }
+                    else {
+                        this.saveData.players[playerIndex].inventory.boots[index].enchants.push(...this.getEnchantments('BootEnchants'));
+                        msg.channel.send(`${msg.author.username}, you enchanted your ${this.saveData.players[playerIndex].inventory.boots[index].type} Boots with the following:\n${this.saveData.players[playerIndex].inventory.boots[index].enchants.join(', ')}`);
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    break;
+                case 'Pick':
+                    if (index + 1 > this.saveData.players[playerIndex].inventory.picks.length || index < 0) {
+                        msg.channel.send(`${msg.author.username}, that pickaxe doesn't exist! Try Again.`);
+                        this.displayPicks(msg);
+                    }
+                    else if (this.saveData.players[playerIndex].inventory.picks[index].enchants.length > 0) {
+                        msg.channel.send(`${msg.author.username}, that pickaxe is already enchanted. Try a different pickaxe.`);
+                        this.displayPicks(msg);
+                    }
+                    else {
+                        this.saveData.players[playerIndex].inventory.picks[index].enchants.push(...this.getEnchantments('PickEnchants'));
+                        msg.channel.send(`${msg.author.username}, you enchanted your ${this.saveData.players[playerIndex].inventory.picks[index].type} Pickaxe with the following:\n${this.saveData.players[playerIndex].inventory.picks[index].enchants.join(', ')}`);
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    break;
+                case 'Sword':
+                    if (index + 1 > this.saveData.players[playerIndex].inventory.swords.length || index < 0) {
+                        msg.channel.send(`${msg.author.username}, that sword doesn't exist! Try Again.`);
+                        this.displaySwords(msg);
+                    }
+                    else if (this.saveData.players[playerIndex].inventory.swords[index].enchants.length > 0) {
+                        msg.channel.send(`${msg.author.username}, that sword is already enchanted. Try a different sword.`);
+                        this.displaySwords(msg);
+                    }
+                    else {
+                        this.saveData.players[playerIndex].inventory.swords[index].enchants.push(...this.getEnchantments('SwordEnchants'));
+                        msg.channel.send(`${msg.author.username}, you enchanted your ${this.saveData.players[playerIndex].inventory.swords[index].type} Sword with the following:\n${this.saveData.players[playerIndex].inventory.swords[index].enchants.join(', ')}`);
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    break;
+            }
+            this.save(this.saveData);
+        }
+    }
+    getEnchantments(type) {
+        let allEnchantments = [];
+        let enchantmentAmount = 1;
+        let enchantmentAmountRand = Math.random();
+        if (enchantmentAmountRand > 0.1) enchantmentAmount = 2;
+        if (enchantmentAmountRand > 0.4) enchantmentAmount = 3;
+        if (enchantmentAmountRand > 0.85) enchantmentAmount = 4;
+        let done = false;
+        do {
+            let enchantTypeIndex = Math.floor(Math.random()*this.enchants[type].length);
+            let rand = Math.random();
+            let temp;
+            this.enchants[type][enchantTypeIndex].levels.forEach((level) => {
+                if (rand >= level.odds) {
+                    temp = level.type
+                }
+            });
+            allEnchantments.push(temp);
+            enchantmentAmount--;
+            let toRemove = this.enchants[type][enchantTypeIndex].conflicts;
+            this.enchants[type].splice((enchantTypeIndex), 1);
+            toRemove.forEach((conflict) => {
+                let tempIndex = this.enchants[type].findIndex((findEnchant) => findEnchant.type === conflict);
+                this.enchants[type].splice((tempIndex), 1);
+            });
+            if (enchantmentAmount === 0) {
+                done = true;
+            }
+            if (this.enchants[type].length === 0) {
+                done = true;
+            }
+        } while (!done)
+        this.enchants = enchantmentsList;
+        return allEnchantments;
     }
 }
 
