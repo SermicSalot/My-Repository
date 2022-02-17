@@ -216,28 +216,511 @@
         },
         {
             "type": "Unbreaking III",
-            "successMod": 0,
+            "successMod": 3,
             "odds": 0.7
         }
     ],
     "HelmentEnchants": [
         {
-
+            "type": "Aqua Affinity I",
+            "successMod": 0,
+            "odds": 0
+        },
+        {
+            "type": "Blast Protection I",
+            "successMod": 1,
+            "odds": 0
+        },
+        {
+            "type": "Blast Protection II",
+            "successMod": 2,
+            "odds": 0.15
+        },
+        {
+            "type": "Blast Protection III",
+            "successMod": 3,
+            "odds": 0.45
+        },
+        {
+            "type": "Blast Protection IV",
+            "successMod": 4,
+            "odds": 0.75
+        },
+        {
+            "type": "Fire Protection I",
+            "successMod": 0,
+            "odds": 0
+        },
+        {
+            "type": "Fire Protection II",
+            "successMod": 0,
+            "odds": 0.15
+        },
+        {
+            "type": "Fire Protection III",
+            "successMod": 0,
+            "odds": 0.45
+        },
+        {
+            "type": "Fire Protection IV",
+            "successMod": 0,
+            "odds": 0.75
+        },
+        {
+            "type": "Projectile Protection I",
+            "successMod": 0,
+            "odds": 0
+        },
+        {
+            "type": "Projectile Protection II",
+            "successMod": 0,
+            "odds": 0.15
+        },
+        {
+            "type": "Projectile Protection III",
+            "successMod": 0,
+            "odds": 0.45
+        },
+        {
+            "type": "Projectile Protection IV",
+            "successMod": 0,
+            "odds": 0.75
+        },
+        {
+            "type": "Protection I",
+            "successMod": 2,
+            "odds": 0
+        },
+        {
+            "type": "Protection II",
+            "successMod": 4,
+            "odds": 0.15
+        },
+        {
+            "type": "Protection III",
+            "successMod": 6,
+            "odds": 0.45
+        },
+        {
+            "type": "Protection IV",
+            "successMod": 8,
+            "odds": 0.75
+        },
+        {
+            "type": "Respiration I",
+            "successMod": 0,
+            "odds": 0
+        },
+        {
+            "type": "Respiration II",
+            "successMod": 0,
+            "odds": 0.2
+        },
+        {
+            "type": "Respiration III",
+            "successMod": 0,
+            "odds": 0.7
+        },
+        {
+            "type": "Thorns I",
+            "successMod": 1,
+            "odds": 0
+        },
+        {
+            "type": "Thorns II",
+            "successMod": 2,
+            "odds": 0.2
+        },
+        {
+            "type": "Thorns III",
+            "successMod": 3,
+            "odds": 0.7
+        },
+        {
+            "type": "Unbreaking I",
+            "successMod": 1,
+            "odds": 0
+        },
+        {
+            "type": "Unbreaking II",
+            "successMod": 2,
+            "odds": 0.2
+        },
+        {
+            "type": "Unbreaking III",
+            "successMod": 3,
+            "odds": 0.7
         }
     ],
     "ChestplateEnchants": [
         {
-
+            "type": "Blast Protection I",
+            "successMod": 1,
+            "odds": 0
+        },
+        {
+            "type": "Blast Protection II",
+            "successMod": 2,
+            "odds": 0.15
+        },
+        {
+            "type": "Blast Protection III",
+            "successMod": 3,
+            "odds": 0.45
+        },
+        {
+            "type": "Blast Protection IV",
+            "successMod": 4,
+            "odds": 0.75
+        },
+        {
+            "type": "Fire Protection I",
+            "successMod": 0,
+            "odds": 0
+        },
+        {
+            "type": "Fire Protection II",
+            "successMod": 0,
+            "odds": 0.15
+        },
+        {
+            "type": "Fire Protection III",
+            "successMod": 0,
+            "odds": 0.45
+        },
+        {
+            "type": "Fire Protection IV",
+            "successMod": 0,
+            "odds": 0.75
+        },
+        {
+            "type": "Projectile Protection I",
+            "successMod": 0,
+            "odds": 0
+        },
+        {
+            "type": "Projectile Protection II",
+            "successMod": 0,
+            "odds": 0.15
+        },
+        {
+            "type": "Projectile Protection III",
+            "successMod": 0,
+            "odds": 0.45
+        },
+        {
+            "type": "Projectile Protection IV",
+            "successMod": 0,
+            "odds": 0.75
+        },
+        {
+            "type": "Protection I",
+            "successMod": 2,
+            "odds": 0
+        },
+        {
+            "type": "Protection II",
+            "successMod": 4,
+            "odds": 0.15
+        },
+        {
+            "type": "Protection III",
+            "successMod": 6,
+            "odds": 0.45
+        },
+        {
+            "type": "Protection IV",
+            "successMod": 8,
+            "odds": 0.75
+        },
+        {
+            "type": "Thorns I",
+            "successMod": 1,
+            "odds": 0
+        },
+        {
+            "type": "Thorns II",
+            "successMod": 2,
+            "odds": 0.2
+        },
+        {
+            "type": "Thorns III",
+            "successMod": 3,
+            "odds": 0.7
+        },
+        {
+            "type": "Unbreaking I",
+            "successMod": 1,
+            "odds": 0
+        },
+        {
+            "type": "Unbreaking II",
+            "successMod": 2,
+            "odds": 0.2
+        },
+        {
+            "type": "Unbreaking III",
+            "successMod": 3,
+            "odds": 0.7
         }
     ],
     "LeggingEnchants": [
         {
-
+            "type": "Blast Protection I",
+            "successMod": 1,
+            "odds": 0
+        },
+        {
+            "type": "Blast Protection II",
+            "successMod": 2,
+            "odds": 0.15
+        },
+        {
+            "type": "Blast Protection III",
+            "successMod": 3,
+            "odds": 0.45
+        },
+        {
+            "type": "Blast Protection IV",
+            "successMod": 4,
+            "odds": 0.75
+        },
+        {
+            "type": "Fire Protection I",
+            "successMod": 0,
+            "odds": 0
+        },
+        {
+            "type": "Fire Protection II",
+            "successMod": 0,
+            "odds": 0.15
+        },
+        {
+            "type": "Fire Protection III",
+            "successMod": 0,
+            "odds": 0.45
+        },
+        {
+            "type": "Fire Protection IV",
+            "successMod": 0,
+            "odds": 0.75
+        },
+        {
+            "type": "Projectile Protection I",
+            "successMod": 0,
+            "odds": 0
+        },
+        {
+            "type": "Projectile Protection II",
+            "successMod": 0,
+            "odds": 0.15
+        },
+        {
+            "type": "Projectile Protection III",
+            "successMod": 0,
+            "odds": 0.45
+        },
+        {
+            "type": "Projectile Protection IV",
+            "successMod": 0,
+            "odds": 0.75
+        },
+        {
+            "type": "Protection I",
+            "successMod": 2,
+            "odds": 0
+        },
+        {
+            "type": "Protection II",
+            "successMod": 4,
+            "odds": 0.15
+        },
+        {
+            "type": "Protection III",
+            "successMod": 6,
+            "odds": 0.45
+        },
+        {
+            "type": "Protection IV",
+            "successMod": 8,
+            "odds": 0.75
+        },
+        {
+            "type": "Thorns I",
+            "successMod": 1,
+            "odds": 0
+        },
+        {
+            "type": "Thorns II",
+            "successMod": 2,
+            "odds": 0.2
+        },
+        {
+            "type": "Thorns III",
+            "successMod": 3,
+            "odds": 0.7
+        },
+        {
+            "type": "Unbreaking I",
+            "successMod": 1,
+            "odds": 0
+        },
+        {
+            "type": "Unbreaking II",
+            "successMod": 2,
+            "odds": 0.2
+        },
+        {
+            "type": "Unbreaking III",
+            "successMod": 3,
+            "odds": 0.7
         }
     ],
     "BootEnchants": [
         {
-
+            "type": "Blast Protection I",
+            "successMod": 1,
+            "odds": 0
+        },
+        {
+            "type": "Blast Protection II",
+            "successMod": 2,
+            "odds": 0.15
+        },
+        {
+            "type": "Blast Protection III",
+            "successMod": 3,
+            "odds": 0.45
+        },
+        {
+            "type": "Blast Protection IV",
+            "successMod": 4,
+            "odds": 0.75
+        },
+        {
+            "type": "Fire Protection I",
+            "successMod": 0,
+            "odds": 0
+        },
+        {
+            "type": "Fire Protection II",
+            "successMod": 0,
+            "odds": 0.15
+        },
+        {
+            "type": "Fire Protection III",
+            "successMod": 0,
+            "odds": 0.45
+        },
+        {
+            "type": "Fire Protection IV",
+            "successMod": 0,
+            "odds": 0.75
+        },
+        {
+            "type": "Projectile Protection I",
+            "successMod": 0,
+            "odds": 0
+        },
+        {
+            "type": "Projectile Protection II",
+            "successMod": 0,
+            "odds": 0.15
+        },
+        {
+            "type": "Projectile Protection III",
+            "successMod": 0,
+            "odds": 0.45
+        },
+        {
+            "type": "Projectile Protection IV",
+            "successMod": 0,
+            "odds": 0.75
+        },
+        {
+            "type": "Protection I",
+            "successMod": 2,
+            "odds": 0
+        },
+        {
+            "type": "Protection II",
+            "successMod": 4,
+            "odds": 0.15
+        },
+        {
+            "type": "Protection III",
+            "successMod": 6,
+            "odds": 0.45
+        },
+        {
+            "type": "Protection IV",
+            "successMod": 8,
+            "odds": 0.75
+        },
+        {
+            "type": "Thorns I",
+            "successMod": 1,
+            "odds": 0
+        },
+        {
+            "type": "Thorns II",
+            "successMod": 2,
+            "odds": 0.2
+        },
+        {
+            "type": "Thorns III",
+            "successMod": 3,
+            "odds": 0.7
+        },
+        {
+            "type": "Unbreaking I",
+            "successMod": 1,
+            "odds": 0
+        },
+        {
+            "type": "Unbreaking II",
+            "successMod": 2,
+            "odds": 0.2
+        },
+        {
+            "type": "Unbreaking III",
+            "successMod": 3,
+            "odds": 0.7
+        },
+        {
+            "type": "Feather Falling I",
+            "successMod": 1,
+            "odds": 0
+        },
+        {
+            "type": "Feather Falling II",
+            "successMod": 2,
+            "odds": 0.15
+        },
+        {
+            "type": "Feather Falling III",
+            "successMod": 3,
+            "odds": 0.45
+        },
+        {
+            "type": "Feather Falling IV",
+            "successMod": 4,
+            "odds": 0.75
+        },
+        {
+            "type": "Depth Strider I",
+            "successMod": 0,
+            "odds": 0
+        },
+        {
+            "type": "Depth Strider II",
+            "successMod": 0,
+            "odds": 0.2
+        },
+        {
+            "type": "Depth Strider III",
+            "successMod": 0,
+            "odds": 0.7
         }
     ]
 }

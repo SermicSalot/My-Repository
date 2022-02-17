@@ -270,7 +270,7 @@ class Minecraft {
                 case 'Crafting':
                     str = str.split(' ');
                     if (str.length === 2) {
-                        //TODO this.craft(msg, str[0], str[1])
+                        this.craft(msg, str[0], str[1]);
                     }
                     else {
                         this.unexpectedResponse(msg);
@@ -278,7 +278,7 @@ class Minecraft {
                     break;
                 case 'Smelting':
                     if (str.startsWith('all')) {
-                        //TODO this.smelt(msg, 'all', 'all')
+                        this.smelt(msg, 'all', 'all');
                     }
                     else if (str.startsWith('iron')) {
                         msg.channel.send(`${msg.author.username}, how much Iron would you like to smelt? Respond with a number or "all".`);
@@ -294,10 +294,10 @@ class Minecraft {
                     break;
                 case 'Smelting Iron':
                     if (!isNaN(parseInt(str))) {
-                        //TODO this.smelt(msg, 'Iron', parseInt(str))
+                        this.smelt(msg, 'Iron', parseInt(str));
                     }
                     else if (str.startsWith('all')) {
-                        //TODO this.smelt(msg, 'Iron', 'all')
+                        this.smelt(msg, 'Iron', 'all');
                     }
                     else {
                         this.unexpectedResponse(msg);
@@ -305,10 +305,10 @@ class Minecraft {
                     break;
                 case 'Smelting Gold':
                     if (!isNaN(parseInt(str))) {
-                        //TODO this.smelt(msg, 'Gold', parseInt(str))
+                        this.smelt(msg, 'Gold', parseInt(str));
                     }
                     else if (str.startsWith('all')) {
-                        //TODO this.smelt(msg, 'Gold', 'all')
+                        this.smelt(msg, 'Gold', 'all');
                     }
                     else {
                         this.unexpectedResponse(msg);
@@ -352,7 +352,7 @@ class Minecraft {
                 case 'Enchanting Helmet':
                     choice = parseInt(str);
                     if (!isNaN(choice)) {
-                        //TODO this.enchant(msg, 'Helmet', choice - 1)
+                        //TODO this.enchant(msg, 'Helmet', choice - 1);
                     }
                     else {
                         this.unexpectedResponse(msg);
@@ -361,7 +361,7 @@ class Minecraft {
                 case 'Enchanting Chestplate':
                     choice = parseInt(str);
                     if (!isNaN(choice)) {
-                        //TODO this.enchant(msg, 'Chestplate', choice - 1)
+                        //TODO this.enchant(msg, 'Chestplate', choice - 1);
                     }
                     else {
                         this.unexpectedResponse(msg);
@@ -370,7 +370,7 @@ class Minecraft {
                 case 'Enchanting Leggings':
                     choice = parseInt(str);
                     if (!isNaN(choice)) {
-                        //TODO this.enchant(msg, 'Leggings', choice - 1)
+                        //TODO this.enchant(msg, 'Leggings', choice - 1);
                     }
                     else {
                         this.unexpectedResponse(msg);
@@ -379,7 +379,7 @@ class Minecraft {
                 case 'Enchanting Boots':
                     choice = parseInt(str);
                     if (!isNaN(choice)) {
-                        //TODO this.enchant(msg, 'Boots', choice - 1)
+                        //TODO this.enchant(msg, 'Boots', choice - 1);
                     }
                     else {
                         this.unexpectedResponse(msg);
@@ -388,7 +388,7 @@ class Minecraft {
                 case 'Enchanting Pick':
                     choice = parseInt(str);
                     if (!isNaN(choice)) {
-                        //TODO this.enchant(msg, 'Pick', choice - 1)
+                        //TODO this.enchant(msg, 'Pick', choice - 1);
                     }
                     else {
                         this.unexpectedResponse(msg);
@@ -397,7 +397,7 @@ class Minecraft {
                 case 'Enchanting Sword':
                     choice = parseInt(str);
                     if (!isNaN(choice)) {
-                        //TODO this.enchant(msg, 'Sword', choice - 1)
+                        //TODO this.enchant(msg, 'Sword', choice - 1);
                     }
                     else {
                         this.unexpectedResponse(msg);
@@ -436,8 +436,7 @@ class Minecraft {
                 case 'Equipping Helmet':
                     choice = parseInt(str);
                     if (!isNaN(choice)) {
-                        //TODO this.equip(msg, 'Helmet', choice - 1)
-                        this.playerStates.delete(msg.author.id);
+                        this.equip(msg, 'Helmet', choice - 1);
                     }
                     else {
                         this.unexpectedResponse(msg);
@@ -446,8 +445,7 @@ class Minecraft {
                 case 'Equipping Chestplate':
                     choice = parseInt(str);
                     if (!isNaN(choice)) {
-                        //TODO this.equip(msg, 'Chestplate', choice - 1)
-                        this.playerStates.delete(msg.author.id);
+                        this.equip(msg, 'Chestplate', choice - 1);
                     }
                     else {
                         this.unexpectedResponse(msg);
@@ -456,8 +454,7 @@ class Minecraft {
                 case 'Equipping Leggings':
                     choice = parseInt(str);
                     if (!isNaN(choice)) {
-                        //TODO this.equip(msg, 'Leggings', choice - 1)
-                        this.playerStates.delete(msg.author.id);
+                        this.equip(msg, 'Leggings', choice - 1);
                     }
                     else {
                         this.unexpectedResponse(msg);
@@ -466,8 +463,7 @@ class Minecraft {
                 case 'Equipping Boots':
                     choice = parseInt(str);
                     if (!isNaN(choice)) {
-                        //TODO this.equip(msg, 'Boots', choice - 1)
-                        this.playerStates.delete(msg.author.id);
+                        this.equip(msg, 'Boots', choice - 1);
                     }
                     else {
                         this.unexpectedResponse(msg);
@@ -476,8 +472,7 @@ class Minecraft {
                 case 'Equipping Sword':
                     choice = parseInt(str);
                     if (!isNaN(choice)) {
-                        //TODO this.equip(msg, 'Sword', choice - 1)
-                        this.playerStates.delete(msg.author.id);
+                        this.equip(msg, 'Sword', choice - 1);
                     }
                     else {
                         this.unexpectedResponse(msg);
@@ -532,25 +527,99 @@ class Minecraft {
                     }
                     break;
                 case 'Destroying':
-                    //TODO
+                    if (str.startsWith('pick')) {
+                        this.displayPicks(msg);
+                        msg.channel.send(`${msg.author.username}, which Pickaxe would you like to destroy? Respond with the corresponding number.`);
+                        this.playerStates.set(msg.author.id, "Destroying Pick");
+                    }
+                    else if (str.startsWith('sword')) {
+                        this.displaySwords(msg);
+                        msg.channel.send(`${msg.author.username}, which Sword would you like to destroy? Respond with the corresponding number.`);
+                        this.playerStates.set(msg.author.id, "Destroying Sword");
+                    }
+                    else if (str.startsWith('helmet')) {
+                        this.displayHelmets(msg);
+                        msg.channel.send(`${msg.author.username}, which Helmet would you like to destroy? Respond with the corresponding number.`);
+                        this.playerStates.set(msg.author.id, "Destroying Helmet");
+                    }
+                    else if (str.startsWith('chestplate')) {
+                        this.displayChestplates(msg);
+                        msg.channel.send(`${msg.author.username}, which Chestplate would you like to destroy? Respond with the corresponding number.`);
+                        this.playerStates.set(msg.author.id, "Destroying Chestplate");
+                    }
+                    else if (str.startsWith('leggings')) {
+                        this.displayLeggings(msg);
+                        msg.channel.send(`${msg.author.username}, which Leggings would you like to destroy? Respond with the corresponding number.`);
+                        this.playerStates.set(msg.author.id, "Destroying Leggings");
+                    }
+                    else if (str.startsWith('boots')) {
+                        this.displayBoots(msg);
+                        msg.channel.send(`${msg.author.username}, which Boots would you like to destroy? Respond with the correstponding number.`);
+                        this.playerStates.set(msg.author.id, "Destroying Boots");
+                    }
+                    else {
+                        this.unexpectedResponse(msg);
+                    }
                     break;
                 case 'Destroying Pick':
-                    //TODO
+                    choice = parseInt(str);
+                    if (!isNaN(choice)) {
+                        this.destroy(msg, 'Pick', choice - 1);
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    else {
+                        this.unexpectedResponse(msg);
+                    }
                     break;
                 case 'Destroying Helmet':
-                    //TODO
+                    choice = parseInt(str);
+                    if (!isNaN(choice)) {
+                        this.destroy(msg, 'Helmet', choice - 1);
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    else {
+                        this.unexpectedResponse(msg);
+                    }
                     break;
                 case 'Destroying Chestplate':
-                    //TODO
+                    choice = parseInt(str);
+                    if (!isNaN(choice)) {
+                        this.destroy(msg, 'Chestplate', choice - 1);
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    else {
+                        this.unexpectedResponse(msg);
+                    }
                     break;
                 case 'Destroying Leggings':
-                    //TODO
+                    choice = parseInt(str);
+                    if (!isNaN(choice)) {
+                        this.destroy(msg, 'Leggings', choice - 1);
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    else {
+                        this.unexpectedResponse(msg);
+                    }
                     break;
                 case 'Destroying Boots':
-                    //TODO
+                    choice = parseInt(str);
+                    if (!isNaN(choice)) {
+                        this.destroy(msg, 'Boots', choice - 1);
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    else {
+                        this.unexpectedResponse(msg);
+                    }
                     break;
                 case 'Destroying Sword':
-                    //TODO
+                    choice = parseInt(str);
+                    if (!isNaN(choice)) {
+                        this.destroy(msg, 'Sword', choice - 1);
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    else {
+                        this.unexpectedResponse(msg);
+                    }
                     break;
             }
         }
@@ -915,7 +984,7 @@ class Minecraft {
     }
     displayItems(msg) {
         this.load();
-        this.saveData.player.forEach((player) => {
+        this.saveData.players.forEach((player) => {
             if (player.id === msg.author.id) {
                 let text = `${msg.author.username}'s items:\n`;
                 text += `EXP: ${player.exp}\n`;
@@ -1115,7 +1184,7 @@ class Minecraft {
             }
         }
     }
-    craft(msg, material, equipment) { //Not done
+    craft(msg, material, equipment) {
         this.load();
         let playerIndex = this.saveData.players.findIndex((player) => player.id === msg.author.id);
         if (playerIndex === -1) {
@@ -1123,110 +1192,649 @@ class Minecraft {
         }
         else {
             if (equipment.startsWith('pick')) {
-                if (material.startsWith('stone') || material.startsWith('cobble')) {
-
-                }
-                else if (material.startsWith('iron')) {
-
-                }
-                else if (material.startsWith('gold')) {
-
-                }
-                else if (material.startsWith('diamond')) {
-
+                if (this.saveData.players[playerIndex].inventory.picks.length >= 5) {
+                    msg.channel.send(`${msg.author.username}, you have too many pickaxes and can't craft any more. To get rid of some, either mine with them or do "m.mine" and reply "destroy".`);
                 }
                 else {
-                    this.unexpectedResponse(msg);
+                    if (material.startsWith('stone') || material.startsWith('cobble')) {
+                        if (this.saveData.players[playerIndex].inventory.cobblestone < 3) {
+                            msg.react('❌');
+                            msg.channel.send(`${msg.author.username}, you don't have the materials required to make that!\nNeeded: 3 Cobblestone\nYour inventory: ${this.saveData.players[playerIndex].inventory.cobblestone} Cobblestone`);
+                        }
+                        else {
+                            this.saveData.players[playerIndex].inventory.picks.push({
+                                type: 'Stone',
+                                enchants: [],
+                            });
+                            this.saveData.players[playerIndex].inventory.cobblestone -= 3;
+                            msg.react('✅');
+                        }
+                    }
+                    else if (material.startsWith('iron')) {
+                        if (this.saveData.players[playerIndex].inventory.iron_ingot < 3) {
+                            msg.react('❌');
+                            msg.channel.send(`${msg.author.username}, you don't have the materials required to make that!\nNeeded: 3 Iron Ingots\nYour inventory: ${this.saveData.players[playerIndex].inventory.iron_ingot} Iron Ingot(s)`);
+                        }
+                        else {
+                            this.saveData.players[playerIndex].inventory.picks.push({
+                                type: 'Iron',
+                                enchants: [],
+                            });
+                            this.saveData.players[playerIndex].inventory.iron_ingot -= 3;
+                            msg.react('✅');
+                        }
+                    }
+                    else if (material.startsWith('gold')) {
+                        if (this.saveData.players[playerIndex].inventory.gold_ingot < 3) {
+                            msg.react('❌');
+                            msg.channel.send(`${msg.author.username}, you don't have the materials required to make that!\nNeeded: 3 Gold Ingots\nYour inventory: ${this.saveData.players[playerIndex].inventory.gold_ingot} Gold Ingot(s)`);
+                        }
+                        else {
+                            this.saveData.players[playerIndex].inventory.picks.push({
+                                type: 'Gold',
+                                enchants: [],
+                            });
+                            this.saveData.players[playerIndex].inventory.gold_ingot -= 3;
+                            msg.react('✅');
+                        }
+                    }
+                    else if (material.startsWith('diamond')) {
+                        if (this.saveData.players[playerIndex].inventory.diamond < 3) {
+                            msg.react('❌');
+                            msg.channel.send(`${msg.author.username}, you don't have the materials required to make that!\nNeeded: 3 Diamonds\nYour inventory: ${this.saveData.players[playerIndex].inventory.diamond} Diamond(s)`);
+                        }
+                        else {
+                            this.saveData.players[playerIndex].inventory.picks.push({
+                                type: 'Diamond',
+                                enchants: [],
+                            });
+                            this.saveData.players[playerIndex].inventory.diamond -= 3;
+                            msg.react('✅');
+                        }
+                    }
+                    else {
+                        this.unexpectedResponse(msg);
+                    }
                 }
             }
             else if (equipment.startsWith('sword')) {
-                if (material.startsWith('stone') || material.startsWith('cobble')) {
-
-                }
-                else if (material.startsWith('iron')) {
-
-                }
-                else if (material.startsWith('gold')) {
-
-                }
-                else if (material.startsWith('diamond')) {
-
+                if (this.saveData.players[playerIndex].inventory.swords.length >= 5) {
+                    msg.channel.send(`${msg.author.username}, you have too many swords and can't craft any more. To get rid of some, do "m.mine" and reply "destroy".`);
                 }
                 else {
-                    this.unexpectedResponse(msg);
+                    if (material.startsWith('stone') || material.startsWith('cobble')) {
+                        if (this.saveData.players[playerIndex].inventory.cobblestone < 2) {
+                            msg.react('❌');
+                            msg.channel.send(`${msg.author.username}, you don't have the materials required to make that!\nNeeded: 2 Cobblestone\nYour inventory: ${this.saveData.players[playerIndex].inventory.cobblestone} Cobblestone`);
+                        }
+                        else {
+                            this.saveData.players[playerIndex].inventory.swords.push({
+                                type: 'Stone',
+                                enchants: [],
+                                equipped: false
+                            });
+                            this.saveData.players[playerIndex].inventory.cobblestone -= 2;
+                            msg.react('✅');
+                        }
+                    }
+                    else if (material.startsWith('iron')) {
+                        if (this.saveData.players[playerIndex].inventory.iron_ingot < 2) {
+                            msg.react('❌');
+                            msg.channel.send(`${msg.author.username}, you don't have the materials required to make that!\nNeeded: 2 Iron Ingots\nYour inventory: ${this.saveData.players[playerIndex].inventory.iron_ingot} Iron Ingot(s)`);
+                        }
+                        else {
+                            this.saveData.players[playerIndex].inventory.swords.push({
+                                type: 'Iron',
+                                enchants: [],
+                                equipped: false
+                            });
+                            this.saveData.players[playerIndex].inventory.iron_ingot -= 2;
+                            msg.react('✅');
+                        }
+                    }
+                    else if (material.startsWith('gold')) {
+                        if (this.saveData.players[playerIndex].inventory.gold_ingot < 2) {
+                            msg.react('❌');
+                            msg.channel.send(`${msg.author.username}, you don't have the materials required to make that!\nNeeded: 2 Gold Ingots\nYour inventory: ${this.saveData.players[playerIndex].inventory.gold_ingot} Gold Ingot(s)`);
+                        }
+                        else {
+                            this.saveData.players[playerIndex].inventory.swords.push({
+                                type: 'Gold',
+                                enchants: [],
+                                equipped: false
+                            });
+                            this.saveData.players[playerIndex].inventory.gold_ingot -= 2;
+                            msg.react('✅');
+                        }
+                    }
+                    else if (material.startsWith('diamond')) {
+                        if (this.saveData.players[playerIndex].inventory.diamond < 2) {
+                            msg.react('❌');
+                            msg.channel.send(`${msg.author.username}, you don't have the materials required to make that!\nNeeded: 2 Diamonds\nYour inventory: ${this.saveData.players[playerIndex].inventory.diamond} Diamond(s)`);
+                        }
+                        else {
+                            this.saveData.players[playerIndex].inventory.swords.push({
+                                type: 'Diamond',
+                                enchants: [],
+                                equipped: false
+                            });
+                            this.saveData.players[playerIndex].inventory.diamond -= 2;
+                            msg.react('✅');
+                        }
+                    }
+                    else {
+                        this.unexpectedResponse(msg);
+                    }
                 }
             }
             else if (equipment.startsWith('helmet')) {
-                if (material.startsWith('stone') || material.startsWith('cobble')) {
-                    msg.channel.send(`${msg.author.username}, Stone Helmets don't exist! Try something else!`);
-                }
-                else if (material.startsWith('iron')) {
-
-                }
-                else if (material.startsWith('gold')) {
-
-                }
-                else if (material.startsWith('diamond')) {
-
+                if (this.saveData.players[playerIndex].inventory.helmets.length >= 5) {
+                    msg.channel.send(`${msg.author.username}, you have too many helmets and can't craft any more. To get rid of some, do "m.mine" and reply "destroy".`);
                 }
                 else {
-                    this.unexpectedResponse(msg);
+                    if (material.startsWith('stone') || material.startsWith('cobble')) {
+                        msg.channel.send(`${msg.author.username}, Stone Helmets don't exist!`);
+                    }
+                    else if (material.startsWith('iron')) {
+                        if (this.saveData.players[playerIndex].inventory.iron_ingot < 5) {
+                            msg.react('❌');
+                            msg.channel.send(`${msg.author.username}, you don't have the materials required to make that!\nNeeded: 5 Iron Ingots\nYour inventory: ${this.saveData.players[playerIndex].inventory.iron_ingot} Iron Ingot(s)`);
+                        }
+                        else {
+                            this.saveData.players[playerIndex].inventory.helmets.push({
+                                type: 'Iron',
+                                enchants: [],
+                                equipped: false
+                            });
+                            this.saveData.players[playerIndex].inventory.iron_ingot -= 5;
+                            msg.react('✅');
+                        }
+                    }
+                    else if (material.startsWith('gold')) {
+                        if (this.saveData.players[playerIndex].inventory.gold_ingot < 5) {
+                            msg.react('❌');
+                            msg.channel.send(`${msg.author.username}, you don't have the materials required to make that!\nNeeded: 5 Gold Ingots\nYour inventory: ${this.saveData.players[playerIndex].inventory.gold_ingot} Gold Ingot(s)`);
+                        }
+                        else {
+                            this.saveData.players[playerIndex].inventory.helmets.push({
+                                type: 'Gold',
+                                enchants: [],
+                                equipped: false
+                            });
+                            this.saveData.players[playerIndex].inventory.gold_ingot -= 5;
+                            msg.react('✅');
+                        }
+                    }
+                    else if (material.startsWith('diamond')) {
+                        if (this.saveData.players[playerIndex].inventory.diamond < 5) {
+                            msg.react('❌');
+                            msg.channel.send(`${msg.author.username}, you don't have the materials required to make that!\nNeeded: 5 Diamonds\nYour inventory: ${this.saveData.players[playerIndex].inventory.diamond} Diamond(s)`);
+                        }
+                        else {
+                            this.saveData.players[playerIndex].inventory.helmets.push({
+                                type: 'Diamond',
+                                enchants: [],
+                                equipped: false
+                            });
+                            this.saveData.players[playerIndex].inventory.diamond -= 5;
+                            msg.react('✅');
+                        }
+                    }
+                    else {
+                        this.unexpectedResponse(msg);
+                    }
                 }
             }
             else if (equipment.startsWith('chestplate')) {
-                if (material.startsWith('stone') || material.startsWith('cobble')) {
-                    msg.channel.send(`${msg.author.username}, Stone Chestplates don't exist! Try something else!`);
-                }
-                else if (material.startsWith('iron')) {
-
-                }
-                else if (material.startsWith('gold')) {
-
-                }
-                else if (material.startsWith('diamond')) {
-
+                if (this.saveData.players[playerIndex].inventory.chestplates.length >= 5) {
+                    msg.channel.send(`${msg.author.username}, you have too many chestplates and can't craft any more. To get rid of some, do "m.mine" and reply "destroy".`);
                 }
                 else {
-                    this.unexpectedResponse(msg);
+                    if (material.startsWith('stone') || material.startsWith('cobble')) {
+                        msg.channel.send(`${msg.author.username}, Stone Chestplates don't exist!`);
+                    }
+                    else if (material.startsWith('iron')) {
+                        if (this.saveData.players[playerIndex].inventory.iron_ingot < 8) {
+                            msg.react('❌');
+                            msg.channel.send(`${msg.author.username}, you don't have the materials required to make that!\nNeeded: 8 Iron Ingots\nYour inventory: ${this.saveData.players[playerIndex].inventory.iron_ingot} Iron Ingot(s)`);
+                        }
+                        else {
+                            this.saveData.players[playerIndex].inventory.chestplates.push({
+                                type: 'Iron',
+                                enchants: [],
+                                equipped: false
+                            });
+                            this.saveData.players[playerIndex].inventory.iron_ingot -= 8;
+                            msg.react('✅');
+                        }
+                    }
+                    else if (material.startsWith('gold')) {
+                        if (this.saveData.players[playerIndex].inventory.gold_ingot < 8) {
+                            msg.react('❌');
+                            msg.channel.send(`${msg.author.username}, you don't have the materials required to make that!\nNeeded: 8 Gold Ingots\nYour inventory: ${this.saveData.players[playerIndex].inventory.gold_ingot} Gold Ingot(s)`);
+                        }
+                        else {
+                            this.saveData.players[playerIndex].inventory.chestplates.push({
+                                type: 'Gold',
+                                enchants: [],
+                                equipped: false
+                            });
+                            this.saveData.players[playerIndex].inventory.gold_ingot -= 8;
+                            msg.react('✅');
+                        }
+                    }
+                    else if (material.startsWith('diamond')) {
+                        if (this.saveData.players[playerIndex].inventory.diamond < 8) {
+                            msg.react('❌');
+                            msg.channel.send(`${msg.author.username}, you don't have the materials required to make that!\nNeeded: 8 Diamonds\nYour inventory: ${this.saveData.players[playerIndex].inventory.diamond} Diamond(s)`);
+                        }
+                        else {
+                            this.saveData.players[playerIndex].inventory.chestplates.push({
+                                type: 'Diamond',
+                                enchants: [],
+                                equipped: false
+                            });
+                            this.saveData.players[playerIndex].inventory.diamond -= 8;
+                            msg.react('✅');
+                        }
+                    }
+                    else {
+                        this.unexpectedResponse(msg);
+                    }
                 }
             }
             else if (equipment.startsWith('leggings')) {
-                if (material.startsWith('stone') || material.startsWith('cobble')) {
-                    msg.channel.send(`${msg.author.username}, Stone Leggings don't exist! Try something else!`);
-                }
-                else if (material.startsWith('iron')) {
-
-                }
-                else if (material.startsWith('gold')) {
-
-                }
-                else if (material.startsWith('diamond')) {
-
+                if (this.saveData.players[playerIndex].inventory.leggings.length >= 5) {
+                    msg.channel.send(`${msg.author.username}, you have too many leggings and can't craft any more. To get rid of some, do "m.mine" and reply "destroy".`);
                 }
                 else {
-                    this.unexpectedResponse(msg);
+                    if (material.startsWith('stone') || material.startsWith('cobble')) {
+                        msg.channel.send(`${msg.author.username}, Stone Leggings don't exist!`);
+                    }
+                    else if (material.startsWith('iron')) {
+                        if (this.saveData.players[playerIndex].inventory.iron_ingot < 7) {
+                            msg.react('❌');
+                            msg.channel.send(`${msg.author.username}, you don't have the materials required to make that!\nNeeded: 7 Iron Ingots\nYour inventory: ${this.saveData.players[playerIndex].inventory.iron_ingot} Iron Ingot(s)`);
+                        }
+                        else {
+                            this.saveData.players[playerIndex].inventory.leggings.push({
+                                type: 'Iron',
+                                enchants: [],
+                                equipped: false
+                            });
+                            this.saveData.players[playerIndex].inventory.iron_ingot -= 7;
+                            msg.react('✅');
+                        }
+                    }
+                    else if (material.startsWith('gold')) {
+                        if (this.saveData.players[playerIndex].inventory.gold_ingot < 7) {
+                            msg.react('❌');
+                            msg.channel.send(`${msg.author.username}, you don't have the materials required to make that!\nNeeded: 7 Gold Ingots\nYour inventory: ${this.saveData.players[playerIndex].inventory.gold_ingot} Gold Ingot(s)`);
+                        }
+                        else {
+                            this.saveData.players[playerIndex].inventory.leggings.push({
+                                type: 'Gold',
+                                enchants: [],
+                                equipped: false
+                            });
+                            this.saveData.players[playerIndex].inventory.gold_ingot -= 7;
+                            msg.react('✅');
+                        }
+                    }
+                    else if (material.startsWith('diamond')) {
+                        if (this.saveData.players[playerIndex].inventory.diamond < 7) {
+                            msg.react('❌');
+                            msg.channel.send(`${msg.author.username}, you don't have the materials required to make that!\nNeeded: 7 Diamonds\nYour inventory: ${this.saveData.players[playerIndex].inventory.diamond} Diamond(s)`);
+                        }
+                        else {
+                            this.saveData.players[playerIndex].inventory.leggings.push({
+                                type: 'Diamond',
+                                enchants: [],
+                                equipped: false
+                            });
+                            this.saveData.players[playerIndex].inventory.diamond -= 7;
+                            msg.react('✅');
+                        }
+                    }
+                    else {
+                        this.unexpectedResponse(msg);
+                    }
                 }
             }
             else if (equipment.startsWith('boots')) {
-                if (material.startsWith('stone') || material.startsWith('cobble')) {
-                    msg.channel.send(`${msg.author.username}, Stone Boots don't exist! Try something else!`);
-                }
-                else if (material.startsWith('iron')) {
-
-                }
-                else if (material.startsWith('gold')) {
-
-                }
-                else if (material.startsWith('diamond')) {
-
+                if (this.saveData.players[playerIndex].inventory.boots.length >= 5) {
+                    msg.channel.send(`${msg.author.username}, you have too many boots and can't craft any more. To get rid of some, do "m.mine" and reply "destroy".`);
                 }
                 else {
-                    this.unexpectedResponse(msg);
+                    if (material.startsWith('stone') || material.startsWith('cobble')) {
+                        msg.channel.send(`${msg.author.username}, Stone Boots don't exist!`);
+                    }
+                    else if (material.startsWith('iron')) {
+                        if (this.saveData.players[playerIndex].inventory.iron_ingot < 4) {
+                            msg.react('❌');
+                            msg.channel.send(`${msg.author.username}, you don't have the materials required to make that!\nNeeded: 4 Iron Ingots\nYour inventory: ${this.saveData.players[playerIndex].inventory.iron_ingot} Iron Ingot(s)`);
+                        }
+                        else {
+                            this.saveData.players[playerIndex].inventory.boots.push({
+                                type: 'Iron',
+                                enchants: [],
+                                equipped: false
+                            });
+                            this.saveData.players[playerIndex].inventory.iron_ingot -= 4;
+                            msg.react('✅');
+                        }
+                    }
+                    else if (material.startsWith('gold')) {
+                        if (this.saveData.players[playerIndex].inventory.gold_ingot < 4) {
+                            msg.react('❌');
+                            msg.channel.send(`${msg.author.username}, you don't have the materials required to make that!\nNeeded: 4 Gold Ingots\nYour inventory: ${this.saveData.players[playerIndex].inventory.gold_ingot} Gold Ingot(s)`);
+                        }
+                        else {
+                            this.saveData.players[playerIndex].inventory.boots.push({
+                                type: 'Gold',
+                                enchants: [],
+                                equipped: false
+                            });
+                            this.saveData.players[playerIndex].inventory.gold_ingot -= 4;
+                            msg.react('✅');
+                        }
+                    }
+                    else if (material.startsWith('diamond')) {
+                        if (this.saveData.players[playerIndex].inventory.diamond < 4) {
+                            msg.react('❌');
+                            msg.channel.send(`${msg.author.username}, you don't have the materials required to make that!\nNeeded: 4 Diamonds\nYour inventory: ${this.saveData.players[playerIndex].inventory.diamond} Diamond(s)`);
+                        }
+                        else {
+                            this.saveData.players[playerIndex].inventory.boots.push({
+                                type: 'Diamond',
+                                enchants: [],
+                                equipped: false
+                            });
+                            this.saveData.players[playerIndex].inventory.diamond -= 4;
+                            msg.react('✅');
+                        }
+                    }
+                    else {
+                        this.unexpectedResponse(msg);
+                    }
                 }
             }
             else {
                 this.unexpectedResponse(msg);
             }
+            this.playerStates.delete(msg.author.id);
+            this.save(this.saveData);
+        }
+    }
+    destroy(msg, equipment, index) {
+        this.load();
+        let playerIndex = this.saveData.players.findIndex((player) => player.id === msg.author.id);
+        if (playerIndex === -1) {
+            msg.channel.send(`<@265567107280797696>, we got a big problem here. In destroy.`);
+        }
+        else {
+            switch (equipment) {
+                case 'Pick':
+                    if (index + 1 > this.saveData.players[playerIndex].inventory.picks.length || index < 0) {
+                        msg.channel.send(`${msg.author.username}, that pickaxe doesn't exist! Choose one that does exist to destroy.`);
+                    }
+                    else {
+                        this.saveData.players[playerIndex].inventory.picks.splice(index, 1);
+                        msg.react('✅');
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    break;
+                case 'Sword':
+                    if (index + 1 > this.saveData.players[playerIndex].inventory.swords.length || index < 0) {
+                        msg.channel.send(`${msg.author.username}, that sword doesn't exist! Choose one that does exist to destroy.`);
+                    }
+                    else {
+                        this.saveData.players[playerIndex].inventory.swords.splice(index, 1);
+                        msg.react('✅');
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    break;
+                case 'Helmet':
+                    if (index + 1 > this.saveData.players[playerIndex].inventory.helmets.length || index < 0) {
+                        msg.channel.send(`${msg.author.username}, that helmet doesn't exist! Choose one that does exist to destroy.`);
+                    }
+                    else {
+                        this.saveData.players[playerIndex].inventory.helmets.splice(index, 1);
+                        msg.react('✅');
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    break;
+                case 'Chestplate':
+                    if (index + 1 > this.saveData.players[playerIndex].inventory.chestplates.length || index < 0) {
+                        msg.channel.send(`${msg.author.username}, that chestplate doesn't exist! Choose one that does exist to destroy.`);
+                    }
+                    else {
+                        this.saveData.players[playerIndex].inventory.chestplates.splice(index, 1);
+                        msg.react('✅');
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    break;
+                case 'Leggings':
+                    if (index + 1 > this.saveData.players[playerIndex].inventory.leggings.length || index < 0) {
+                        msg.channel.send(`${msg.author.username}, those leggings don't exist! Choose one that does exist to destroy.`);
+                    }
+                    else {
+                        this.saveData.players[playerIndex].inventory.leggings.splice(index, 1);
+                        msg.react('✅');
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    break;
+                case 'Boots':
+                    if (index + 1 > this.saveData.players[playerIndex].inventory.boots.length || index < 0) {
+                        msg.channel.send(`${msg.author.username}, those boots don't exist! Choose one that does exist to destroy.`);
+                    }
+                    else {
+                        this.saveData.players[playerIndex].inventory.boots.splice(index, 1);
+                        msg.react('✅');
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    break;
+            }
+            this.save(this.saveData);
+        }
+    }
+    smelt(msg, type, amount) {
+        this.load();
+        let playerIndex = this.saveData.players.findIndex((player) => player.id === msg.author.id);
+        if (playerIndex === -1) {
+            msg.channel.send(`<@265567107280797696>, we got a big problem here. In smelt.`);
+        }
+        else {
+            let total;
+            switch (type) {
+                case 'all':
+                    total = this.saveData.players[playerIndex].inventory.iron_ore + this.saveData.players[playerIndex].inventory.gold_ore;
+                    if (total === 0) {
+                        msg.channel.send(`${msg.author.username}, you don't have any iron or gold ore to smelt!`);
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    else if (Math.ceil(total/8) > this.saveData.players[playerIndex].inventory.coal) {
+                        msg.channel.send(`${msg.author.username}, you don't have enough coal to smelt all your iron and gold ore!`);
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    else {
+                        this.saveData.players[playerIndex].smeltTimeEnd = Date.now() + total*10000;
+                        msg.channel.send(`${msg.author.username}, you are now smelting ${this.saveData.players[playerIndex].inventory.iron_ore} Iron Ore and ${this.saveData.players[playerIndex].inventory.gold_ore} Gold Ore.\nYou will be done in ${this.getDoneTime(msg, 'smelt')}. (HH:MM:SS)`);
+                        this.saveData.players[playerIndex].inventory.coal -= Math.ceil(total/8);
+                        this.saveData.players[playerIndex].temp_inventory.iron_ingot += this.saveData.players[playerIndex].inventory.iron_ore;
+                        this.saveData.players[playerIndex].temp_inventory.gold_ingot += this.saveData.players[playerIndex].inventory.gold_ore;
+                        this.saveData.players[playerIndex].inventory.iron_ore = 0;
+                        this.saveData.players[playerIndex].inventory.gold_ore = 0;
+                        this.saveData.players[playerIndex].temp_inventory.exp += Math.floor(total*0.7);
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    break;
+                case 'Iron':
+                    if (amount === 'all') {
+                        total = this.saveData.players[playerIndex].inventory.iron_ore;
+                        if (total === 0) {
+                            msg.channel.send(`${msg.author.username}, you don't have any Iron Ore to smelt!`);
+                            this.playerStates.delete(msg.author.id);
+                            break;
+                        }
+                    }
+                    else {
+                        total = amount;
+                    }
+                    if (total === 0) {
+                        msg.channel.send(`${msg.author.username}, congrats, you smelted 0 Iron Ore....Maybe try a higher number?`);
+                    }
+                    else if (total < 0) {
+                        msg.channel.send(`${msg.author.username}, give a **positive** number of Iron Ore to smelt.`);
+                    }
+                    else {
+                        if (total > this.saveData.players[playerIndex].inventory.iron_ore) {
+                            msg.channel.send(`${msg.author.username}, you don't have that much Iron Ore. You only have ${this.saveData.players[playerIndex].inventory.iron_ore} Iron Ore.`);
+                            this.playerStates.delete(msg.author.id);
+                        }
+                        else if (Math.ceil(total/8) > this.saveData.players[playerIndex].inventory.coal) {
+                            msg.channel.send(`${msg.author.username}, you don't have enough coal to smelt ${total} Iron Ore.\nTip: 1 piece of coal will smelt 8 items`);
+                            this.playerStates.delete(msg.author.id);
+                        }
+                        else {
+                            this.saveData.players[playerIndex].smeltTimeEnd = Date.now() + total*10000;
+                            msg.channel.send(`${msg.author.username}, you are now smelting ${total} Iron Ore.\nYou will be done in ${this.getDoneTime(msg, 'smelt')}. (HH:MM:SS)`);
+                            this.saveData.players[playerIndex].inventory.coal -= Math.ceil(total/8);
+                            this.saveData.players[playerIndex].temp_inventory.iron_ingot += total;
+                            this.saveData.players[playerIndex].inventory.iron_ore -= total;
+                            this.saveData.players[playerIndex].temp_inventory.exp += Math.floor(total*0.7);
+                            this.playerStates.delete(msg.author.id);
+                        }
+                    }
+                    break;
+                case 'Gold':
+                    if (amount === 'all') {
+                        total = this.saveData.players[playerIndex].inventory.gold_ore;
+                        if (total === 0) {
+                            msg.channel.send(`${msg.author.username}, you don't have any Gold Ore to smelt!`);
+                            this.playerStates.delete(msg.author.id);
+                            break;
+                        }
+                    }
+                    else {
+                        total = amount;
+                    }
+                    if (total === 0) {
+                        msg.channel.send(`${msg.author.username}, congrats, you smelted 0 Gold Ore....Maybe try a higher number?`);
+                    }
+                    else if (total < 0) {
+                        msg.channel.send(`${msg.author.username}, give a **positive** number of Gold Ore to smelt.`);
+                    }
+                    else {
+                        if (total > this.saveData.players[playerIndex].inventory.gold_ore) {
+                            msg.channel.send(`${msg.author.username}, you don't have that much Gold Ore. You only have ${this.saveData.players[playerIndex].inventory.gold_ore} Gold Ore.`);
+                            this.playerStates.delete(msg.author.id);
+                        }
+                        else if (Math.ceil(total/8) > this.saveData.players[playerIndex].inventory.coal) {
+                            msg.channel.send(`${msg.author.username}, you don't have enough coal to smelt ${total} Gold Ore.\nTip: 1 piece of coal will smelt 8 items`);
+                            this.playerStates.delete(msg.author.id);
+                        }
+                        else {
+                            this.saveData.players[playerIndex].smeltTimeEnd = Date.now() + total*10000;
+                            msg.channel.send(`${msg.author.username}, you are now smelting ${total} Gold Ore.\nYou will be done in ${this.getDoneTime(msg, 'smelt')}. (HH:MM:SS)`);
+                            this.saveData.players[playerIndex].inventory.coal -= Math.ceil(total/8);
+                            this.saveData.players[playerIndex].temp_inventory.gold_ingot += total;
+                            this.saveData.players[playerIndex].inventory.gold_ore -= total;
+                            this.saveData.players[playerIndex].temp_inventory.exp += Math.floor(total*0.7);
+                            this.playerStates.delete(msg.author.id);
+                        }
+                    }
+                    break;
+            }
+            this.save(this.saveData);
+        }
+    }
+    equip(msg, equipment, index) {
+        this.load();
+        let playerIndex = this.saveData.players.findIndex((player) => player.id === msg.author.id);
+        if (playerIndex === -1) {
+            msg.channel.send(`<@265567107280797696>, we got a big problem here. In equip.`);
+        }
+        else {
+            let equippedIndex;
+            switch (equipment) {
+                case 'Helmet':
+                    if (index + 1 > this.saveData.players[playerIndex].inventory.helmets.length || index < 0) {
+                        msg.channel.send(`${msg.author.username}, that helmet doesn't exist! Try Again.`);
+                        this.displayHelmets(msg);
+                    }
+                    else {
+                        equippedIndex = this.saveData.players[playerIndex].inventory.helmets.findIndex((helmet) => helmet.equipped);
+                        if (equippedIndex !== -1) {
+                            this.saveData.players[playerIndex].inventory.helmets[equippedIndex].equipped = false;
+                        }
+                        this.saveData.players[playerIndex].inventory.helmets[index].equipped = true;
+                        msg.react('✅');
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    break;
+                case 'Chestplate':
+                    if (index + 1 > this.saveData.players[playerIndex].inventory.chestplates.length || index < 0) {
+                        msg.channel.send(`${msg.author.username}, that chestplate doesn't exist! Try Again.`);
+                        this.displayChestplates(msg);
+                    }
+                    else {
+                        equippedIndex = this.saveData.players[playerIndex].inventory.chestplates.findIndex((chestplate) => chestplate.equipped);
+                        if (equippedIndex !== -1) {
+                            this.saveData.players[playerIndex].inventory.chestplates[equippedIndex].equipped = false;
+                        }
+                        this.saveData.players[playerIndex].inventory.chestplates[index].equipped = true;
+                        msg.react('✅');
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    break;
+                case 'Leggings':
+                    if (index + 1 > this.saveData.players[playerIndex].inventory.leggings.length || index < 0) {
+                        msg.channel.send(`${msg.author.username}, those leggings don't exist! Try Again.`);
+                        this.displayLeggings(msg);
+                    }
+                    else {
+                        equippedIndex = this.saveData.players[playerIndex].inventory.leggings.findIndex((legging) => legging.equipped);
+                        if (equippedIndex !== -1) {
+                            this.saveData.players[playerIndex].inventory.leggings[equippedIndex].equipped = false;
+                        }
+                        this.saveData.players[playerIndex].inventory.leggings[index].equipped = true;
+                        msg.react('✅');
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    break;
+                case 'Boots':
+                    if (index + 1 > this.saveData.players[playerIndex].inventory.boots.length || index < 0) {
+                        msg.channel.send(`${msg.author.username}, those boots don't exist! Try Again.`);
+                        this.displayBoots(msg);
+                    }
+                    else {
+                        equippedIndex = this.saveData.players[playerIndex].inventory.boots.findIndex((boot) => boot.equipped);
+                        if (equippedIndex !== -1) {
+                            this.saveData.players[playerIndex].inventory.boots[equippedIndex].equipped = false;
+                        }
+                        this.saveData.players[playerIndex].inventory.boots[index].equipped = true;
+                        msg.react('✅');
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    break;
+                case 'Sword':
+                    if (index + 1 > this.saveData.players[playerIndex].inventory.swords.length || index < 0) {
+                        msg.channel.send(`${msg.author.username}, that sword doesn't exist! Try Again.`);
+                        this.displaySwords(msg);
+                    }
+                    else {
+                        equippedIndex = this.saveData.players[playerIndex].inventory.swords.findIndex((sword) => sword.equipped);
+                        if (equippedIndex !== -1) {
+                            this.saveData.players[playerIndex].inventory.swords[equippedIndex].equipped = false;
+                        }
+                        this.saveData.players[playerIndex].inventory.swords[index].equipped = true;
+                        msg.react('✅');
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    break;
+            }
+            this.save(this.saveData);
         }
     }
 }
