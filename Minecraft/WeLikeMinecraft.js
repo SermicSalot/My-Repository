@@ -5,7 +5,8 @@ const fs = require('fs');
 
 class Minecraft {
     constructor() {
-        this.afkTime = 30000
+        this.afkTime = 30000;
+        this.enchantCost = 50;
         this.picks = pickaxesList;
         this.enchants = enchantmentsList;
         this.saveData = playerSaveData;
@@ -1858,8 +1859,13 @@ class Minecraft {
                         msg.channel.send(`${msg.author.username}, that helmet is already enchanted. Try a different helmet.`);
                         this.displayHelmets(msg);
                     }
+                    else if (this.saveData.players[playerIndex].exp < this.enchantCost) {
+                        msg.channel.send(`${msg.author.username}, you don't have enough exp to enchant!\nYou have ${this.saveData.players[playerIndex].exp} and you need ${this.enchantCost} to enchant.`);
+                        this.playerStates.delete(msg.author.id);
+                    }
                     else {
                         this.saveData.players[playerIndex].inventory.helmets[index].enchants.push(...this.getEnchantments('HelmetEnchants'));
+                        this.saveData.players[playerIndex].exp -= this.enchantCost;
                         msg.channel.send(`${msg.author.username}, you enchanted your ${this.saveData.players[playerIndex].inventory.helmets[index].type} Helmet with the following:\n${this.saveData.players[playerIndex].inventory.helmets[index].enchants.join(', ')}`);
                         this.playerStates.delete(msg.author.id);
                     }
@@ -1873,8 +1879,13 @@ class Minecraft {
                         msg.channel.send(`${msg.author.username}, that chestplate is already enchanted. Try a different chestplate.`);
                         this.displayChestplates(msg);
                     }
+                    else if (this.saveData.players[playerIndex].exp < this.enchantCost) {
+                        msg.channel.send(`${msg.author.username}, you don't have enough exp to enchant!\nYou have ${this.saveData.players[playerIndex].exp} and you need ${this.enchantCost} to enchant.`);
+                        this.playerStates.delete(msg.author.id);
+                    }
                     else {
                         this.saveData.players[playerIndex].inventory.chestplates[index].enchants.push(...this.getEnchantments('ChestplateEnchants'));
+                        this.saveData.players[playerIndex].exp -= this.enchantCost;
                         msg.channel.send(`${msg.author.username}, you enchanted your ${this.saveData.players[playerIndex].inventory.chestplates[index].type} Chestplate with the following:\n${this.saveData.players[playerIndex].inventory.chestplates[index].enchants.join(', ')}`);
                         this.playerStates.delete(msg.author.id);
                     }
@@ -1888,8 +1899,13 @@ class Minecraft {
                         msg.channel.send(`${msg.author.username}, those leggings are already enchanted. Try different leggings.`);
                         this.displayLeggings(msg);
                     }
+                    else if (this.saveData.players[playerIndex].exp < this.enchantCost) {
+                        msg.channel.send(`${msg.author.username}, you don't have enough exp to enchant!\nYou have ${this.saveData.players[playerIndex].exp} and you need ${this.enchantCost} to enchant.`);
+                        this.playerStates.delete(msg.author.id);
+                    }
                     else {
                         this.saveData.players[playerIndex].inventory.leggings[index].enchants.push(...this.getEnchantments('LeggingEnchants'));
+                        this.saveData.players[playerIndex].exp -= this.enchantCost;
                         msg.channel.send(`${msg.author.username}, you enchanted your ${this.saveData.players[playerIndex].inventory.leggings[index].type} Leggings with the following:\n${this.saveData.players[playerIndex].inventory.leggings[index].enchants.join(', ')}`);
                         this.playerStates.delete(msg.author.id);
                     }
@@ -1903,8 +1919,13 @@ class Minecraft {
                         msg.channel.send(`${msg.author.username}, those boots are already enchanted. Try different boots.`);
                         this.displayBoots(msg);
                     }
+                    else if (this.saveData.players[playerIndex].exp < this.enchantCost) {
+                        msg.channel.send(`${msg.author.username}, you don't have enough exp to enchant!\nYou have ${this.saveData.players[playerIndex].exp} and you need ${this.enchantCost} to enchant.`);
+                        this.playerStates.delete(msg.author.id);
+                    }
                     else {
                         this.saveData.players[playerIndex].inventory.boots[index].enchants.push(...this.getEnchantments('BootEnchants'));
+                        this.saveData.players[playerIndex].exp -= this.enchantCost;
                         msg.channel.send(`${msg.author.username}, you enchanted your ${this.saveData.players[playerIndex].inventory.boots[index].type} Boots with the following:\n${this.saveData.players[playerIndex].inventory.boots[index].enchants.join(', ')}`);
                         this.playerStates.delete(msg.author.id);
                     }
@@ -1918,8 +1939,13 @@ class Minecraft {
                         msg.channel.send(`${msg.author.username}, that pickaxe is already enchanted. Try a different pickaxe.`);
                         this.displayPicks(msg);
                     }
+                    else if (this.saveData.players[playerIndex].exp < this.enchantCost) {
+                        msg.channel.send(`${msg.author.username}, you don't have enough exp to enchant!\nYou have ${this.saveData.players[playerIndex].exp} and you need ${this.enchantCost} to enchant.`);
+                        this.playerStates.delete(msg.author.id);
+                    }
                     else {
                         this.saveData.players[playerIndex].inventory.picks[index].enchants.push(...this.getEnchantments('PickEnchants'));
+                        this.saveData.players[playerIndex].exp -= this.enchantCost;
                         msg.channel.send(`${msg.author.username}, you enchanted your ${this.saveData.players[playerIndex].inventory.picks[index].type} Pickaxe with the following:\n${this.saveData.players[playerIndex].inventory.picks[index].enchants.join(', ')}`);
                         this.playerStates.delete(msg.author.id);
                     }
@@ -1933,8 +1959,13 @@ class Minecraft {
                         msg.channel.send(`${msg.author.username}, that sword is already enchanted. Try a different sword.`);
                         this.displaySwords(msg);
                     }
+                    else if (this.saveData.players[playerIndex].exp < this.enchantCost) {
+                        msg.channel.send(`${msg.author.username}, you don't have enough exp to enchant!\nYou have ${this.saveData.players[playerIndex].exp} and you need ${this.enchantCost} to enchant.`);
+                        this.playerStates.delete(msg.author.id);
+                    }
                     else {
                         this.saveData.players[playerIndex].inventory.swords[index].enchants.push(...this.getEnchantments('SwordEnchants'));
+                        this.saveData.players[playerIndex].exp -= this.enchantCost;
                         msg.channel.send(`${msg.author.username}, you enchanted your ${this.saveData.players[playerIndex].inventory.swords[index].type} Sword with the following:\n${this.saveData.players[playerIndex].inventory.swords[index].enchants.join(', ')}`);
                         this.playerStates.delete(msg.author.id);
                     }
