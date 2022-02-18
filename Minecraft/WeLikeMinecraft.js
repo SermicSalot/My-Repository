@@ -1981,7 +1981,7 @@ class Minecraft {
         if (enchantmentAmountRand > 0.1) enchantmentAmount = 2;
         if (enchantmentAmountRand > 0.4) enchantmentAmount = 3;
         if (enchantmentAmountRand > 0.85) enchantmentAmount = 4;
-        let done = false;
+        let enchanting = true;
         do {
             let enchantTypeIndex = Math.floor(Math.random()*this.enchants[type].length);
             let rand = Math.random();
@@ -2000,12 +2000,12 @@ class Minecraft {
                 this.enchants[type].splice((tempIndex), 1);
             });
             if (enchantmentAmount === 0) {
-                done = true;
+                enchanting = false;
             }
             if (this.enchants[type].length === 0) {
-                done = true;
+                enchanting = false;
             }
-        } while (!done)
+        } while (enchanting)
         this.enchants = enchantmentsList;
         return allEnchantments;
     }
