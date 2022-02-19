@@ -1698,7 +1698,9 @@ class Minecraft {
             let total;
             switch (type) {
                 case 'all':
-                    total = this.saveData.players[playerIndex].inventory.iron_ore + this.saveData.players[playerIndex].inventory.gold_ore;
+                    let ironAmount = this.saveData.players[playerIndex].inventory.iron_ore;
+                    let goldAmount = this.saveData.players[playerIndex].inventory.gold_ore;
+                    total = ironAmount + goldAmount;
                     if (total === 0) {
                         msg.channel.send(`${msg.author.username}, you don't have any iron or gold ore to smelt!`);
                         this.playerStates.delete(msg.author.id);
@@ -1708,8 +1710,6 @@ class Minecraft {
                         this.playerStates.delete(msg.author.id);
                     }
                     else {
-                        this.saveData.players[playerIndex].smeltTimeEnd = Date.now() + total*10000;
-                        msg.channel.send(`${msg.author.username}, you are now smelting ${this.saveData.players[playerIndex].inventory.iron_ore} Iron Ore and ${this.saveData.players[playerIndex].inventory.gold_ore} Gold Ore.\nYou will be done in ${this.getDoneTime(msg, 'smelt')}. (HH:MM:SS)`);
                         this.saveData.players[playerIndex].inventory.coal -= Math.ceil(total/8);
                         this.saveData.players[playerIndex].temp_inventory.iron_ingot += this.saveData.players[playerIndex].inventory.iron_ore;
                         this.saveData.players[playerIndex].temp_inventory.gold_ingot += this.saveData.players[playerIndex].inventory.gold_ore;
@@ -1717,6 +1717,9 @@ class Minecraft {
                         this.saveData.players[playerIndex].inventory.gold_ore = 0;
                         this.saveData.players[playerIndex].temp_inventory.exp += Math.floor(total*0.7);
                         this.playerStates.delete(msg.author.id);
+                        this.saveData.players[playerIndex].smeltTimeEnd = Date.now() + total*10000;
+                        this.save(this.saveData);
+                        msg.channel.send(`${msg.author.username}, you are now smelting ${ironAmount} Iron Ore and ${goldAmount} Gold Ore.\nYou will be done in ${this.getDoneTime(msg, 'smelt')}. (HH:MM:SS)`);
                     }
                     break;
                 case 'Iron':
@@ -1747,13 +1750,14 @@ class Minecraft {
                             this.playerStates.delete(msg.author.id);
                         }
                         else {
-                            this.saveData.players[playerIndex].smeltTimeEnd = Date.now() + total*10000;
-                            msg.channel.send(`${msg.author.username}, you are now smelting ${total} Iron Ore.\nYou will be done in ${this.getDoneTime(msg, 'smelt')}. (HH:MM:SS)`);
                             this.saveData.players[playerIndex].inventory.coal -= Math.ceil(total/8);
                             this.saveData.players[playerIndex].temp_inventory.iron_ingot += total;
                             this.saveData.players[playerIndex].inventory.iron_ore -= total;
                             this.saveData.players[playerIndex].temp_inventory.exp += Math.floor(total*0.7);
                             this.playerStates.delete(msg.author.id);
+                            this.saveData.players[playerIndex].smeltTimeEnd = Date.now() + total*10000;
+                            this.save(this.saveData);
+                            msg.channel.send(`${msg.author.username}, you are now smelting ${total} Iron Ore.\nYou will be done in ${this.getDoneTime(msg, 'smelt')}. (HH:MM:SS)`);
                         }
                     }
                     break;
@@ -1785,18 +1789,18 @@ class Minecraft {
                             this.playerStates.delete(msg.author.id);
                         }
                         else {
-                            this.saveData.players[playerIndex].smeltTimeEnd = Date.now() + total*10000;
-                            msg.channel.send(`${msg.author.username}, you are now smelting ${total} Gold Ore.\nYou will be done in ${this.getDoneTime(msg, 'smelt')}. (HH:MM:SS)`);
                             this.saveData.players[playerIndex].inventory.coal -= Math.ceil(total/8);
                             this.saveData.players[playerIndex].temp_inventory.gold_ingot += total;
                             this.saveData.players[playerIndex].inventory.gold_ore -= total;
                             this.saveData.players[playerIndex].temp_inventory.exp += Math.floor(total*0.7);
                             this.playerStates.delete(msg.author.id);
+                            this.saveData.players[playerIndex].smeltTimeEnd = Date.now() + total*10000;
+                            this.save(this.saveData);
+                            msg.channel.send(`${msg.author.username}, you are now smelting ${total} Gold Ore.\nYou will be done in ${this.getDoneTime(msg, 'smelt')}. (HH:MM:SS)`);
                         }
                     }
                     break;
             }
-            this.save(this.saveData);
         }
     }
     equip(msg, equipment, index) {
@@ -1925,7 +1929,7 @@ class Minecraft {
                         msg.channel.send(`${msg.author.username}, that chestplate doesn't exist! Try Again.`);
                         this.displayChestplates(msg);
                     }
-                    else if (this.saveData.players[playerIndex].inventory.chestplate[index].enchants.length > 0) {
+                    else if (this.saveData.players[playerIndex].inventory.chestplates[index].enchants.length > 0) {
                         msg.channel.send(`${msg.author.username}, that chestplate is already enchanted. Try a different chestplate.`);
                         this.displayChestplates(msg);
                     }
@@ -2068,7 +2072,8 @@ class Minecraft {
             });
             allEnchantments.push(temp);
             enchantmentAmount--;
-            let toRemove = this.enchants[type][enchantTypeIndex].conflicts;
+            let toRemove = [];
+            toRemove.push(...this.enchants[type][enchantTypeIndex].conflicts);
             this.enchants[type].splice((enchantTypeIndex), 1);
             toRemove.forEach((conflict) => {
                 let tempIndex = this.enchants[type].findIndex((findEnchant) => findEnchant.type === conflict);
@@ -2081,7 +2086,7 @@ class Minecraft {
                 enchanting = false;
             }
         } while (enchanting)
-        this.enchants = enchantmentsList;
+        this.enchants = JSON.parse(fs.readFileSync('./Minecraft/enchantments.json'));
         return allEnchantments;
     }
     endFightCompletionCheck(msg) {
@@ -2119,11 +2124,11 @@ class Minecraft {
         this.load();
         let successNumber = 0;
         let playerIndex = this.saveData.players.findIndex((player) => player.id === msg.author.id);
-        if (playerIndex = -1) {
+        if (playerIndex === -1) {
             msg.channel.send(`<@265567107280797696>, we got a problem, in endFight.`);
             return;
         }
-        let swordIndex = this.saveData.players[playerIndex].inventory.swords.findIndex((sword) => sword.equipped = true);
+        let swordIndex = this.saveData.players[playerIndex].inventory.swords.findIndex((sword) => sword.equipped === true);
         if (swordIndex !== -1) {
             switch (this.saveData.players[playerIndex].inventory.swords[swordIndex].type) {
                 case 'Stone':
@@ -2151,7 +2156,7 @@ class Minecraft {
                 });
             });
         }
-        let helmetIndex = this.saveData.players[playerIndex].inventory.helmets.findIndex((helmet) => helmet.equipped = true);
+        let helmetIndex = this.saveData.players[playerIndex].inventory.helmets.findIndex((helmet) => helmet.equipped === true);
         if (helmetIndex !== -1) {
             switch (this.saveData.players[playerIndex].inventory.helmets[helmetIndex].type) {
                 case 'Iron':
@@ -2176,7 +2181,7 @@ class Minecraft {
                 });
             });
         }
-        let chestplateIndex = this.saveData.players[playerIndex].inventory.chestplates.findIndex((chestplate) => chestplate.equipped = true);
+        let chestplateIndex = this.saveData.players[playerIndex].inventory.chestplates.findIndex((chestplate) => chestplate.equipped === true);
         if (chestplateIndex !== -1) {
             switch (this.saveData.players[playerIndex].inventory.chestplates[chestplateIndex].type) {
                 case 'Iron':
@@ -2201,7 +2206,7 @@ class Minecraft {
                 });
             });
         }
-        let leggingsIndex = this.saveData.players[playerIndex].inventory.leggings.findIndex((legging) => legging.equipped = true);
+        let leggingsIndex = this.saveData.players[playerIndex].inventory.leggings.findIndex((legging) => legging.equipped === true);
         if (leggingsIndex !== -1) {
             switch (this.saveData.players[playerIndex].inventory.leggings[leggingsIndex].type) {
                 case 'Iron':
@@ -2226,7 +2231,7 @@ class Minecraft {
                 });
             });
         }
-        let bootsIndex = this.saveData.players[playerIndex].inventory.boots.findIndex((boot) => boot.equipped = true);
+        let bootsIndex = this.saveData.players[playerIndex].inventory.boots.findIndex((boot) => boot.equipped === true);
         if (bootsIndex !== -1) {
             switch (this.saveData.players[playerIndex].inventory.boots[bootsIndex].type) {
                 case 'Iron':

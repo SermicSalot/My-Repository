@@ -141,7 +141,8 @@
                     "successMod": 4,
                     "odds": 0.65
                 }
-            ]
+            ],
+            "conflicts": []
         },
         {
             "type": "Knockback",
@@ -156,7 +157,8 @@
                     "successMod": 2,
                     "odds": 0.65
                 }
-            ]
+            ],
+            "conflicts": []
         },
         {
             "type": "Looting",
@@ -176,7 +178,8 @@
                     "successMod": 0,
                     "odds": 0.7
                 }
-            ]
+            ],
+            "conflicts": []
         },
         {
             "type": "Sharpness",
