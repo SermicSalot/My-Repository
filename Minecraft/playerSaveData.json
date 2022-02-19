@@ -1,49 +1,5 @@
 {
     "players": [
-        {
-            "id": "265567107280797696",
-            "name": "Sermic Salot",
-            "difficulty": "Normal",
-            "normal_clears": 0,
-            "normal_attempts": 0,
-            "hardcore_clears": 0,
-            "hardcore_attempts": 0,
-            "exp": 0,
-            "mineTimeEnd": 0,
-            "smeltTimeEnd": 0,
-            "endFightTimeEnd": 0,
-            "inventory": {
-                "cobblestone": 0,
-                "iron_ore": 0,
-                "iron_ingot": 0,
-                "diamond": 0,
-                "gold_ore": 0,
-                "gold_ingot": 0,
-                "coal": 0,
-                "lapis": 0,
-                "picks": [
-                    {
-                        "type": "Wood",
-                        "enchants": []
-                    }
-                ],
-                "helmets": [],
-                "chestplates": [],
-                "leggings": [],
-                "boots": [],
-                "swords": []
-            },
-            "temp_inventory": {
-                "exp": 0,
-                "cobblestone": 0,
-                "iron_ore": 0,
-                "iron_ingot": 0,
-                "diamond": 0,
-                "gold_ore": 0,
-                "gold_ingot": 0,
-                "coal": 0,
-                "lapis": 0
-            }
-        }
+        
     ]
 }

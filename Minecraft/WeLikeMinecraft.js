@@ -6,6 +6,7 @@ const fs = require('fs');
 class Minecraft {
     constructor() {
         this.afkTime = 30000;
+        this.endFightDuration = 1800000;
         this.enchantCost = 50;
         this.picks = pickaxesList;
         this.enchants = enchantmentsList;
@@ -43,7 +44,8 @@ class Minecraft {
             "Destroying Chestplate",
             "Destroying Leggings",
             "Destroying Boots",
-            "Destroying Sword"
+            "Destroying Sword",
+            "Setting Difficulty"
         ];
     }
     main(msg) {
@@ -52,6 +54,7 @@ class Minecraft {
         this.playerActive(msg);
         this.playerStates.delete(msg.author.id);
         this.activeChannel.set(msg.author.id, msg.channel.id);
+        if (this.endFightCompletionCheck(msg)) return;
         let message = '';
         if (!this.saveData.players.some(player => player.id === msg.author.id)) {
             this.addMiner(msg);
@@ -60,7 +63,7 @@ class Minecraft {
         else {
             message += `Welcome back ${msg.author.username}.\n`;
         }
-        this.exampleResponses = ['Mine', 'Craft', 'Smelt', 'Enchant', 'Equip', 'Inventory', 'Loadout', 'Destroy', 'End', 'Stats', 'Help']
+        this.exampleResponses = ['Mine', 'Craft', 'Smelt', 'Enchant', 'Equip', 'Inventory', 'Loadout', 'Destroy', 'End', 'Stats', 'Help'];
         message += `Reply with what you want to do.\nExpected responses are ${this.exampleResponses.join(', ')}. You can respond "Stop" at any time to get out of the game/whatever you are doing.`
         this.save(this.saveData);
         msg.channel.send(message);
@@ -71,6 +74,9 @@ class Minecraft {
         if (str.startsWith('stop') && this.playerStates.get(msg.author.id) !== "Getting Help") {
             this.forceTimeout(msg);
             return;
+        }
+        if (this.playerStates.get(msg.author.id) !== "Setting Difficulty") {
+            if (this.endFightCompletionCheck(msg)) return;
         }
         if (!this.playerStates.get(msg.author.id)) {
             this.playerActive(msg);
@@ -514,7 +520,7 @@ class Minecraft {
                     break;
                 case 'Confirming End Fight':
                     if (str.startsWith('y')) {
-                        //TODO this.endFight(msg)
+                        this.endFight(msg);
                         this.playerStates.delete(msg.author.id);
                         msg.react('✅');
                         msg.channel.send(`${msg.author.username}, you are now fighting to save the end, you will be done in ${this.getDoneTime(msg, 'end')}. (HH:MM:SS)`);
@@ -622,6 +628,41 @@ class Minecraft {
                         this.unexpectedResponse(msg);
                     }
                     break;
+                case 'Setting Difficulty':
+                    this.load();
+                    let playerIndex = this.saveData.players.findIndex((player) => player.id === msg.author.id);
+                    if (playerIndex === -1) {
+                        msg.channel.send(`<@265567107280797696>, we got a big problem here. And idk what the problem is/how we got here.`);
+                        break;
+                    }
+                    if (str.startsWith('hardcore')) {
+                        this.playerActive(msg);
+                        this.saveData.players[playerIndex].difficulty = "Hardcore";
+                        this.saveData.players[playerIndex].endFightTimeEnd = 0;
+                        msg.react('✅');
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    else if (str.startsWith('hard')) {
+                        this.playerActive(msg);
+                        this.saveData.players[playerIndex].difficulty = "Hard";
+                        this.saveData.players[playerIndex].endFightTimeEnd = 0;
+                        msg.react('✅');
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    else if (str.startsWith('normal')) {
+                        this.playerActive(msg);
+                        this.saveData.players[playerIndex].difficulty = "Normal";
+                        this.saveData.players[playerIndex].endFightTimeEnd = 0;
+                        msg.react('✅');
+                        this.playerStates.delete(msg.author.id);
+                    }
+                    else {
+                        this.playerActive(msg);
+                        this.unexpectedResponse(msg);
+                        msg.channel.send(`Please respond with "Normal", "Hard", or "Hardcore".`);
+                    }
+                    this.save(this.saveData)
+                    break;
             }
         }
     }
@@ -693,6 +734,8 @@ class Minecraft {
             difficulty: 'Normal',
             normal_clears: 0,
             normal_attempts: 0,
+            hard_clears: 0,
+            hard_attempts: 0,
             hardcore_clears: 0,
             hardcore_attempts: 0,
             exp: 0,
@@ -1008,6 +1051,8 @@ class Minecraft {
             if (player.id === msg.author.id) {
                 message += `Normal Attempts: ${player.normal_attempts}\n`;
                 message += `Normal Clears: ${player.normal_clears}\n`;
+                message += `Hard Attempts: ${player.hard_attempts}\n`;
+                message += `Hard Clears: ${player.hard_clears}\n`;
                 message += `Hardcore Attempts: ${player.hardcore_attempts}\n`;
                 message += `Hardcore Clears: ${player.hardcore_clears}`
                 msg.channel.send(message);
@@ -1863,9 +1908,14 @@ class Minecraft {
                         msg.channel.send(`${msg.author.username}, you don't have enough exp to enchant!\nYou have ${this.saveData.players[playerIndex].exp} and you need ${this.enchantCost} to enchant.`);
                         this.playerStates.delete(msg.author.id);
                     }
+                    else if (this.saveData.players[playerIndex].inventory.lapis < 3) {
+                        msg.channel.send(`${msg.author.username}, you don't have enough lapis to enchant!\nYou have ${this.saveData.players[playerIndex].inventory.lapis} and you need 3.`);
+                        this.playerStates.delete(msg.author.id); 
+                    }
                     else {
                         this.saveData.players[playerIndex].inventory.helmets[index].enchants.push(...this.getEnchantments('HelmetEnchants'));
                         this.saveData.players[playerIndex].exp -= this.enchantCost;
+                        this.saveData.players[playerIndex].inventory.lapis -= 3;
                         msg.channel.send(`${msg.author.username}, you enchanted your ${this.saveData.players[playerIndex].inventory.helmets[index].type} Helmet with the following:\n${this.saveData.players[playerIndex].inventory.helmets[index].enchants.join(', ')}`);
                         this.playerStates.delete(msg.author.id);
                     }
@@ -1883,9 +1933,14 @@ class Minecraft {
                         msg.channel.send(`${msg.author.username}, you don't have enough exp to enchant!\nYou have ${this.saveData.players[playerIndex].exp} and you need ${this.enchantCost} to enchant.`);
                         this.playerStates.delete(msg.author.id);
                     }
+                    else if (this.saveData.players[playerIndex].inventory.lapis < 3) {
+                        msg.channel.send(`${msg.author.username}, you don't have enough lapis to enchant!\nYou have ${this.saveData.players[playerIndex].inventory.lapis} and you need 3.`);
+                        this.playerStates.delete(msg.author.id); 
+                    }
                     else {
                         this.saveData.players[playerIndex].inventory.chestplates[index].enchants.push(...this.getEnchantments('ChestplateEnchants'));
                         this.saveData.players[playerIndex].exp -= this.enchantCost;
+                        this.saveData.players[playerIndex].inventory.lapis -= 3;
                         msg.channel.send(`${msg.author.username}, you enchanted your ${this.saveData.players[playerIndex].inventory.chestplates[index].type} Chestplate with the following:\n${this.saveData.players[playerIndex].inventory.chestplates[index].enchants.join(', ')}`);
                         this.playerStates.delete(msg.author.id);
                     }
@@ -1903,9 +1958,14 @@ class Minecraft {
                         msg.channel.send(`${msg.author.username}, you don't have enough exp to enchant!\nYou have ${this.saveData.players[playerIndex].exp} and you need ${this.enchantCost} to enchant.`);
                         this.playerStates.delete(msg.author.id);
                     }
+                    else if (this.saveData.players[playerIndex].inventory.lapis < 3) {
+                        msg.channel.send(`${msg.author.username}, you don't have enough lapis to enchant!\nYou have ${this.saveData.players[playerIndex].inventory.lapis} and you need 3.`);
+                        this.playerStates.delete(msg.author.id); 
+                    }
                     else {
                         this.saveData.players[playerIndex].inventory.leggings[index].enchants.push(...this.getEnchantments('LeggingEnchants'));
                         this.saveData.players[playerIndex].exp -= this.enchantCost;
+                        this.saveData.players[playerIndex].inventory.lapis -= 3;
                         msg.channel.send(`${msg.author.username}, you enchanted your ${this.saveData.players[playerIndex].inventory.leggings[index].type} Leggings with the following:\n${this.saveData.players[playerIndex].inventory.leggings[index].enchants.join(', ')}`);
                         this.playerStates.delete(msg.author.id);
                     }
@@ -1923,9 +1983,14 @@ class Minecraft {
                         msg.channel.send(`${msg.author.username}, you don't have enough exp to enchant!\nYou have ${this.saveData.players[playerIndex].exp} and you need ${this.enchantCost} to enchant.`);
                         this.playerStates.delete(msg.author.id);
                     }
+                    else if (this.saveData.players[playerIndex].inventory.lapis < 3) {
+                        msg.channel.send(`${msg.author.username}, you don't have enough lapis to enchant!\nYou have ${this.saveData.players[playerIndex].inventory.lapis} and you need 3.`);
+                        this.playerStates.delete(msg.author.id); 
+                    }
                     else {
                         this.saveData.players[playerIndex].inventory.boots[index].enchants.push(...this.getEnchantments('BootEnchants'));
                         this.saveData.players[playerIndex].exp -= this.enchantCost;
+                        this.saveData.players[playerIndex].inventory.lapis -= 3;
                         msg.channel.send(`${msg.author.username}, you enchanted your ${this.saveData.players[playerIndex].inventory.boots[index].type} Boots with the following:\n${this.saveData.players[playerIndex].inventory.boots[index].enchants.join(', ')}`);
                         this.playerStates.delete(msg.author.id);
                     }
@@ -1943,9 +2008,14 @@ class Minecraft {
                         msg.channel.send(`${msg.author.username}, you don't have enough exp to enchant!\nYou have ${this.saveData.players[playerIndex].exp} and you need ${this.enchantCost} to enchant.`);
                         this.playerStates.delete(msg.author.id);
                     }
+                    else if (this.saveData.players[playerIndex].inventory.lapis < 3) {
+                        msg.channel.send(`${msg.author.username}, you don't have enough lapis to enchant!\nYou have ${this.saveData.players[playerIndex].inventory.lapis} and you need 3.`);
+                        this.playerStates.delete(msg.author.id); 
+                    }
                     else {
                         this.saveData.players[playerIndex].inventory.picks[index].enchants.push(...this.getEnchantments('PickEnchants'));
                         this.saveData.players[playerIndex].exp -= this.enchantCost;
+                        this.saveData.players[playerIndex].inventory.lapis -= 3;
                         msg.channel.send(`${msg.author.username}, you enchanted your ${this.saveData.players[playerIndex].inventory.picks[index].type} Pickaxe with the following:\n${this.saveData.players[playerIndex].inventory.picks[index].enchants.join(', ')}`);
                         this.playerStates.delete(msg.author.id);
                     }
@@ -1963,9 +2033,14 @@ class Minecraft {
                         msg.channel.send(`${msg.author.username}, you don't have enough exp to enchant!\nYou have ${this.saveData.players[playerIndex].exp} and you need ${this.enchantCost} to enchant.`);
                         this.playerStates.delete(msg.author.id);
                     }
+                    else if (this.saveData.players[playerIndex].inventory.lapis < 3) {
+                        msg.channel.send(`${msg.author.username}, you don't have enough lapis to enchant!\nYou have ${this.saveData.players[playerIndex].inventory.lapis} and you need 3.`);
+                        this.playerStates.delete(msg.author.id); 
+                    }
                     else {
                         this.saveData.players[playerIndex].inventory.swords[index].enchants.push(...this.getEnchantments('SwordEnchants'));
                         this.saveData.players[playerIndex].exp -= this.enchantCost;
+                        this.saveData.players[playerIndex].inventory.lapis -= 3;
                         msg.channel.send(`${msg.author.username}, you enchanted your ${this.saveData.players[playerIndex].inventory.swords[index].type} Sword with the following:\n${this.saveData.players[playerIndex].inventory.swords[index].enchants.join(', ')}`);
                         this.playerStates.delete(msg.author.id);
                     }
@@ -2008,6 +2083,302 @@ class Minecraft {
         } while (enchanting)
         this.enchants = enchantmentsList;
         return allEnchantments;
+    }
+    endFightCompletionCheck(msg) {
+        this.load();
+        let playerIndex = this.saveData.players.findIndex((player) => player.id === msg.author.id);
+        if (playerIndex === -1) return false;
+        else if (this.saveData.players[playerIndex].endFightTimeEnd !== 0 && !this.playerIsFighting(msg)) {
+            if (this.saveData.players[playerIndex].difficulty === "Unknown") {
+                this.exampleResponses = ["Normal", "Hard", "Hardcore"];
+                msg.channel.send(`Congrats ${msg.author.username}! Since you were last active, you beat the end. Your inventory has been wiped.\nWhat difficulty would you like to play on? Expected responses are ${this.exampleResponses.join(', ')}.`);
+                this.playerStates.set(msg.author.id, "Setting Difficulty");
+                return true;
+            }
+            else if (this.saveData.players[playerIndex].difficulty === "Failed") {
+                this.exampleResponses = ["Normal", "Hard", "Hardcore"];
+                msg.channel.send(`${msg.author.username}, since you were last active, you failed to beat the end.\nSince your difficulty was hardcore, your inventory has been wiped.\nWhat difficulty would you like to play on? Expected responses are ${this.exampleResponses.join(', ')}.`);
+                this.playerStates.set(msg.author.id, "Setting Difficulty");
+                return true;
+            }
+            else if (this.saveData.players[playerIndex].difficulty === "Normal" || this.saveData.players[playerIndex].difficulty === "Hard") {
+                this.exampleResponses = ['Mine', 'Craft', 'Smelt', 'Enchant', 'Equip', 'Inventory', 'Loadout', 'Destroy', 'End', 'Stats', 'Help'];
+                msg.channel.send(`${msg.author.username}, since you were last active, you failed to beat the end.\nSince your difficulty was ${this.saveData.players[playerIndex].difficulty.toLowerCase()}, you only lost your equipped items.\n\nReply with what you want to do.\nExpected responses are ${this.exampleResponses.join(', ')}. You can respond "Stop" at any time to get out of the game/whatever you are doing.`);
+                this.saveData.players[playerIndex].endFightTimeEnd = 0;
+                this.save(this.saveData);
+                return true;
+            }
+            else {
+                msg.channel.send(`<@265567107280797696>, we got a player.difficulty mismatch. ${this.saveData.players[playerIndex].name}'s difficulty is ${this.saveData.players[playerIndex].difficulty}.`);
+                return true;
+            }
+        }
+        else return false;
+    }
+    endFight(msg) {
+        this.load();
+        let successNumber = 0;
+        let playerIndex = this.saveData.players.findIndex((player) => player.id === msg.author.id);
+        if (playerIndex = -1) {
+            msg.channel.send(`<@265567107280797696>, we got a problem, in endFight.`);
+            return;
+        }
+        let swordIndex = this.saveData.players[playerIndex].inventory.swords.findIndex((sword) => sword.equipped = true);
+        if (swordIndex !== -1) {
+            switch (this.saveData.players[playerIndex].inventory.swords[swordIndex].type) {
+                case 'Stone':
+                    successNumber += 5;
+                    break;
+                case 'Iron':
+                    successNumber += 10;
+                    break;
+                case 'Gold':
+                    successNumber += 7;
+                    break;
+                case 'Diamond':
+                    successNumber += 15;
+                    break;
+            }
+            this.saveData.players[playerIndex].inventory.swords[swordIndex].enchants.forEach((enchant) => {
+                this.enchants.SwordEnchants.forEach((swordEnchant) => {
+                    if (enchant.startsWith(swordEnchant)) {
+                        swordEnchant.levels.forEach((level) => {
+                            if (level.type === enchant) {
+                                successNumber += level.successMod;
+                            }
+                        });
+                    }
+                });
+            });
+        }
+        let helmetIndex = this.saveData.players[playerIndex].inventory.helmets.findIndex((helmet) => helmet.equipped = true);
+        if (helmetIndex !== -1) {
+            switch (this.saveData.players[playerIndex].inventory.helmets[helmetIndex].type) {
+                case 'Iron':
+                    successNumber += 15;
+                    break;
+                case 'Gold':
+                    successNumber += 10;
+                    break;
+                case 'Diamond':
+                    successNumber += 20;
+                    break;
+            }
+            this.saveData.players[playerIndex].inventory.helmets[helmetIndex].enchants.forEach((enchant) => {
+                this.enchants.HelmetEnchants.forEach((helmetEnchant) => {
+                    if (enchant.startsWith(helmetEnchant)) {
+                        helmetEnchant.levels.forEach((level) => {
+                            if (level.type === enchant) {
+                                successNumber += level.successMod;
+                            }
+                        });
+                    }
+                });
+            });
+        }
+        let chestplateIndex = this.saveData.players[playerIndex].inventory.chestplates.findIndex((chestplate) => chestplate.equipped = true);
+        if (chestplateIndex !== -1) {
+            switch (this.saveData.players[playerIndex].inventory.chestplates[chestplateIndex].type) {
+                case 'Iron':
+                    successNumber += 20;
+                    break;
+                case 'Gold':
+                    successNumber += 15;
+                    break;
+                case 'Diamond':
+                    successNumber += 25;
+                    break;
+            }
+            this.saveData.players[playerIndex].inventory.chestplates[chestplateIndex].enchants.forEach((enchant) => {
+                this.enchants.ChestplateEnchants.forEach((chestplateEnchant) => {
+                    if (enchant.startsWith(chestplateEnchant)) {
+                        chestplateEnchant.levels.forEach((level) => {
+                            if (level.type === enchant) {
+                                successNumber += level.successMod;
+                            }
+                        });
+                    }
+                });
+            });
+        }
+        let leggingsIndex = this.saveData.players[playerIndex].inventory.leggings.findIndex((legging) => legging.equipped = true);
+        if (leggingsIndex !== -1) {
+            switch (this.saveData.players[playerIndex].inventory.leggings[leggingsIndex].type) {
+                case 'Iron':
+                    successNumber += 20;
+                    break;
+                case 'Gold':
+                    successNumber += 15;
+                    break;
+                case 'Diamond':
+                    successNumber += 25;
+                    break;
+            }
+            this.saveData.players[playerIndex].inventory.leggings[leggingsIndex].enchants.forEach((enchant) => {
+                this.enchants.LeggingEnchants.forEach((leggingEnchant) => {
+                    if (enchant.startsWith(leggingEnchant)) {
+                        leggingEnchant.levels.forEach((level) => {
+                            if (level.type === enchant) {
+                                successNumber += level.successMod;
+                            }
+                        });
+                    }
+                });
+            });
+        }
+        let bootsIndex = this.saveData.players[playerIndex].inventory.boots.findIndex((boot) => boot.equipped = true);
+        if (bootsIndex !== -1) {
+            switch (this.saveData.players[playerIndex].inventory.boots[bootsIndex].type) {
+                case 'Iron':
+                    successNumber += 15;
+                    break;
+                case 'Gold':
+                    successNumber += 10;
+                    break;
+                case 'Diamond':
+                    successNumber += 20;
+                    break;
+            }
+            this.saveData.players[playerIndex].inventory.boots[bootsIndex].enchants.forEach((enchant) => {
+                this.enchants.BootEnchants.forEach((bootEnchant) => {
+                    if (enchant.startsWith(bootEnchant)) {
+                        bootEnchant.levels.forEach((level) => {
+                            if (level.type === enchant) {
+                                successNumber += level.successMod;
+                            }
+                        });
+                    }
+                });
+            });
+        }
+        this.saveData.players[playerIndex].endFightTimeEnd = Date.now() + this.endFightDuration;
+        let difficulty = this.saveData.players[playerIndex].difficulty;
+        let rand = Math.random();
+        //Max successNumber = 186???
+        switch (difficulty) {
+            case 'Normal':
+                if (successNumber/120 > rand) {
+                    this.saveData.players[playerIndex].normal_clears++;
+                    this.saveData.players[playerIndex].normal_attempts++;
+                    this.saveData.players[playerIndex].exp = 0;
+                    this.saveData.players[playerIndex].inventory.cobblestone = 0;
+                    this.saveData.players[playerIndex].inventory.iron_ore = 0;
+                    this.saveData.players[playerIndex].inventory.iron_ingot = 0;
+                    this.saveData.players[playerIndex].inventory.diamond = 0;
+                    this.saveData.players[playerIndex].inventory.gold_ore = 0;
+                    this.saveData.players[playerIndex].inventory.gold_ingot = 0;
+                    this.saveData.players[playerIndex].inventory.coal = 0;
+                    this.saveData.players[playerIndex].inventory.lapis = 0;
+                    this.saveData.players[playerIndex].inventory.picks = [{type: "Wood", enchants: []}];
+                    this.saveData.players[playerIndex].inventory.helmets = [];
+                    this.saveData.players[playerIndex].inventory.chestplates = [];
+                    this.saveData.players[playerIndex].inventory.leggings = [];
+                    this.saveData.players[playerIndex].inventory.boots = [];
+                    this.saveData.players[playerIndex].inventory.swords = [];
+                    this.saveData.players[playerIndex].difficulty = "Unknown";
+                }
+                else {
+                    this.saveData.players[playerIndex].normal_attempts++;
+                    if (swordIndex !== -1) {
+                        this.saveData.players[playerIndex].inventory.swords.splice(swordIndex, 1);
+                    }
+                    if (helmetIndex !== -1) {
+                        this.saveData.players[playerIndex].inventory.helmets.splice(helmetIndex, 1);
+                    }
+                    if (chestplateIndex !== -1) {
+                        this.saveData.players[playerIndex].inventory.chestplates.splice(chestplateIndex, 1);
+                    }
+                    if (leggingsIndex !== -1) {
+                        this.saveData.players[playerIndex].inventory.leggings.splice(leggingsIndex, 1);
+                    }
+                    if (bootsIndex !== -1) {
+                        this.saveData.players[playerIndex].inventory.boots.splice(bootsIndex, 1);
+                    }
+                }
+                break;
+            case 'Hard':
+                if (successNumber/200 > rand) {
+                    this.saveData.players[playerIndex].hard_clears++;
+                    this.saveData.players[playerIndex].hard_attempts++;
+                    this.saveData.players[playerIndex].exp = 0;
+                    this.saveData.players[playerIndex].inventory.cobblestone = 0;
+                    this.saveData.players[playerIndex].inventory.iron_ore = 0;
+                    this.saveData.players[playerIndex].inventory.iron_ingot = 0;
+                    this.saveData.players[playerIndex].inventory.diamond = 0;
+                    this.saveData.players[playerIndex].inventory.gold_ore = 0;
+                    this.saveData.players[playerIndex].inventory.gold_ingot = 0;
+                    this.saveData.players[playerIndex].inventory.coal = 0;
+                    this.saveData.players[playerIndex].inventory.lapis = 0;
+                    this.saveData.players[playerIndex].inventory.picks = [{type: "Wood", enchants: []}];
+                    this.saveData.players[playerIndex].inventory.helmets = [];
+                    this.saveData.players[playerIndex].inventory.chestplates = [];
+                    this.saveData.players[playerIndex].inventory.leggings = [];
+                    this.saveData.players[playerIndex].inventory.boots = [];
+                    this.saveData.players[playerIndex].inventory.swords = [];
+                    this.saveData.players[playerIndex].difficulty = "Unknown";
+                }
+                else {
+                    this.saveData.players[playerIndex].hard_attempts++;
+                    if (swordIndex !== -1) {
+                        this.saveData.players[playerIndex].inventory.swords.splice(swordIndex, 1);
+                    }
+                    if (helmetIndex !== -1) {
+                        this.saveData.players[playerIndex].inventory.helmets.splice(helmetIndex, 1);
+                    }
+                    if (chestplateIndex !== -1) {
+                        this.saveData.players[playerIndex].inventory.chestplates.splice(chestplateIndex, 1);
+                    }
+                    if (leggingsIndex !== -1) {
+                        this.saveData.players[playerIndex].inventory.leggings.splice(leggingsIndex, 1);
+                    }
+                    if (bootsIndex !== -1) {
+                        this.saveData.players[playerIndex].inventory.boots.splice(bootsIndex, 1);
+                    }
+                }
+                break;
+            case 'Hardcore':
+                if (successNumber/200 > rand) {
+                    this.saveData.players[playerIndex].hardcore_clears++;
+                    this.saveData.players[playerIndex].hardcore_attempts++;
+                    this.saveData.players[playerIndex].exp = 0;
+                    this.saveData.players[playerIndex].inventory.cobblestone = 0;
+                    this.saveData.players[playerIndex].inventory.iron_ore = 0;
+                    this.saveData.players[playerIndex].inventory.iron_ingot = 0;
+                    this.saveData.players[playerIndex].inventory.diamond = 0;
+                    this.saveData.players[playerIndex].inventory.gold_ore = 0;
+                    this.saveData.players[playerIndex].inventory.gold_ingot = 0;
+                    this.saveData.players[playerIndex].inventory.coal = 0;
+                    this.saveData.players[playerIndex].inventory.lapis = 0;
+                    this.saveData.players[playerIndex].inventory.picks = [{type: "Wood", enchants: []}];
+                    this.saveData.players[playerIndex].inventory.helmets = [];
+                    this.saveData.players[playerIndex].inventory.chestplates = [];
+                    this.saveData.players[playerIndex].inventory.leggings = [];
+                    this.saveData.players[playerIndex].inventory.boots = [];
+                    this.saveData.players[playerIndex].inventory.swords = [];
+                    this.saveData.players[playerIndex].difficulty = "Unknown";
+                }
+                else {
+                    this.saveData.players[playerIndex].hard_attempts++;
+                    this.saveData.players[playerIndex].exp = 0;
+                    this.saveData.players[playerIndex].inventory.cobblestone = 0;
+                    this.saveData.players[playerIndex].inventory.iron_ore = 0;
+                    this.saveData.players[playerIndex].inventory.iron_ingot = 0;
+                    this.saveData.players[playerIndex].inventory.diamond = 0;
+                    this.saveData.players[playerIndex].inventory.gold_ore = 0;
+                    this.saveData.players[playerIndex].inventory.gold_ingot = 0;
+                    this.saveData.players[playerIndex].inventory.coal = 0;
+                    this.saveData.players[playerIndex].inventory.lapis = 0;
+                    this.saveData.players[playerIndex].inventory.picks = [{type: "Wood", enchants: []}];
+                    this.saveData.players[playerIndex].inventory.helmets = [];
+                    this.saveData.players[playerIndex].inventory.chestplates = [];
+                    this.saveData.players[playerIndex].inventory.leggings = [];
+                    this.saveData.players[playerIndex].inventory.boots = [];
+                    this.saveData.players[playerIndex].inventory.swords = [];
+                    this.saveData.players[playerIndex].difficulty = "Failed";
+                }
+                break;
+        }
+        this.save(this.saveData);
     }
 }
 
