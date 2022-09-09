@@ -13,7 +13,7 @@ client.once(`ready`, () => {
 client.login(process.env.TOKEN);
 
 
-let game = new Minecraft
+let game = new Minecraft;
 
 
 const prefix = 'm.';
