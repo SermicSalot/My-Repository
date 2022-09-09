@@ -91,7 +91,10 @@ class Minecraft {
                     msg.channel.send(`${msg.author.username}, you are currently fighting the end and can't mine. You will be done in ${this.getDoneTime(msg, 'end')}. (HH:MM:SS)`);
                 }
                 else {
-                    this.displayPicks(msg);
+                    if (this.displayPicks(msg) == "none") {
+                        this.playerStates.delete(msg.author.id);
+                        return;
+                    }
                     msg.channel.send(`${msg.author.username}, respond with the number of the pick you'd like to use.`);
                     this.playerStates.set(msg.author.id, "Selecting Pick");
                 }
@@ -324,32 +327,50 @@ class Minecraft {
                 case 'Enchanting':
                     if (str.startsWith('pick')) {
                         msg.channel.send(`${msg.author.username}, respond with the number of the pick you'd like to enchant.`);
-                        this.displayPicks(msg);
+                        if (this.displayPicks(msg) == "none") {
+                            this.playerStates.delete(msg.author.id);
+                            return;
+                        };
                         this.playerStates.set(msg.author.id, "Enchanting Pick");
                     }
                     else if (str.startsWith('sword')) {
                         msg.channel.send(`${msg.author.username}, respond with the number of the sword you'd like to enchant.`);
-                        this.displaySwords(msg);
+                        if (this.displaySwords(msg) == "none") {
+                            this.playerStates.delete(msg.author.id);
+                            return;
+                        }
                         this.playerStates.set(msg.author.id, "Enchanting Sword");
                     }
                     else if (str.startsWith('helmet')) {
                         msg.channel.send(`${msg.author.username}, respond with the number of the helmet you'd like to enchant.`);
-                        this.displayHelmets(msg);
+                        if (this.displayHelmets(msg) == "none") {
+                            this.playerStates.delete(msg.author.id);
+                            return;
+                        }
                         this.playerStates.set(msg.author.id, "Enchanting Helmet");
                     }
                     else if (str.startsWith('chestplate')) {
                         msg.channel.send(`${msg.author.username}, respond with the number of the chestplate you'd like to enchant.`);
-                        this.displayChestplates(msg);
+                        if (this.displayChestplates(msg) == "none") {
+                            this.playerStates.delete(msg.author.id);
+                            return;
+                        }
                         this.playerStates.set(msg.author.id, "Enchanting Chestplate");
                     }
                     else if (str.startsWith('leggings')) {
                         msg.channel.send(`${msg.author.username}, respond with the number of the leggings you'd like to enchant.`);
-                        this.displayLeggings(msg);
+                        if (this.displayLeggings(msg) == "none") {
+                            this.playerStates.delete(msg.author.id);
+                            return;
+                        }
                         this.playerStates.set(msg.author.id, "Enchanting Leggings");
                     }
                     else if (str.startsWith('boots')) {
                         msg.channel.send(`${msg.author.username}, respond with the number of the boots you'd like to enchant.`);
-                        this.displayBoots(msg);
+                        if (this.displayBoots(msg) == "none") {
+                            this.playerStates.delete(msg.author.id);
+                            return;
+                        }
                         this.playerStates.set(msg.author.id, "Enchanting Boots");
                     }
                     else {
@@ -413,27 +434,42 @@ class Minecraft {
                 case 'Equipping':
                     if (str.startsWith('helmet')) {
                         msg.channel.send(`${msg.author.username}, respond with the number of the helmet you'd like to equip.`);
-                        this.displayHelmets(msg);
+                        if (this.displayHelmets(msg) == "none") {
+                            this.playerStates.delete(msg.author.id);
+                            return;
+                        }
                         this.playerStates.set(msg.author.id, "Equipping Helmet");
                     }
                     else if (str.startsWith('chestplate')) {
                         msg.channel.send(`${msg.author.username}, respond with the number of the chestplate you'd like to equip.`);
-                        this.displayChestplates(msg);
+                        if (this.displayChestplates(msg) == "none") {
+                            this.playerStates.delete(msg.author.id);
+                            return;
+                        }
                         this.playerStates.set(msg.author.id, "Equipping Chestplate");
                     }
                     else if (str.startsWith('leggings')) {
                         msg.channel.send(`${msg.author.username}, respond with the number of the leggings you'd like to equip.`);
-                        this.displayLeggings(msg);
+                        if (this.displayLeggings(msg) == "none") {
+                            this.playerStates.delete(msg.author.id);
+                            return;
+                        }
                         this.playerStates.set(msg.author.id, "Equipping Leggings");
                     }
                     else if (str.startsWith('boots')) {
                         msg.channel.send(`${msg.author.username}, respond with the number of the boots you'd like to equip.`);
-                        this.displayBoots(msg);
+                        if (this.displayBoots(msg) == "none") {
+                            this.playerStates.delete(msg.author.id);
+                            return;
+                        }
                         this.playerStates.set(msg.author.id, "Equipping Boots");
                     }
                     else if (str.startsWith('sword')) {
                         msg.channel.send(`${msg.author.username}, respond with the number of the boots you'd like to equip.`);
-                        this.displaySwords(msg);
+                        if (this.displaySwords(msg) == "none") {
+                            this.playerStates.delete(msg.author.id);
+                            return;
+                        }
                         this.playerStates.set(msg.author.id, "Equipping Sword");
                     }
                     else {
@@ -535,32 +571,50 @@ class Minecraft {
                     break;
                 case 'Destroying':
                     if (str.startsWith('pick')) {
-                        this.displayPicks(msg);
+                        if (this.displayPicks(msg) == "none") {
+                            this.playerStates.delete(msg.author.id);
+                            return;
+                        }
                         msg.channel.send(`${msg.author.username}, which Pickaxe would you like to destroy? Respond with the corresponding number.`);
                         this.playerStates.set(msg.author.id, "Destroying Pick");
                     }
                     else if (str.startsWith('sword')) {
-                        this.displaySwords(msg);
+                        if (this.displaySwords(msg) == "none") {
+                            this.playerStates.delete(msg.author.id);
+                            return;
+                        }
                         msg.channel.send(`${msg.author.username}, which Sword would you like to destroy? Respond with the corresponding number.`);
                         this.playerStates.set(msg.author.id, "Destroying Sword");
                     }
                     else if (str.startsWith('helmet')) {
-                        this.displayHelmets(msg);
+                        if (this.displayHelmets(msg) == "none") {
+                            this.playerStates.delete(msg.author.id)
+                            return;
+                        }
                         msg.channel.send(`${msg.author.username}, which Helmet would you like to destroy? Respond with the corresponding number.`);
                         this.playerStates.set(msg.author.id, "Destroying Helmet");
                     }
                     else if (str.startsWith('chestplate')) {
-                        this.displayChestplates(msg);
+                        if (this.displayChestplates(msg) == "none") {
+                            this.playerStates.delete(msg.author.id);
+                            return;
+                        }
                         msg.channel.send(`${msg.author.username}, which Chestplate would you like to destroy? Respond with the corresponding number.`);
                         this.playerStates.set(msg.author.id, "Destroying Chestplate");
                     }
                     else if (str.startsWith('leggings')) {
-                        this.displayLeggings(msg);
+                        if (this.displayLeggings(msg) == "none") {
+                            this.playerStates.delete(msg.author.id);
+                            return;
+                        }
                         msg.channel.send(`${msg.author.username}, which Leggings would you like to destroy? Respond with the corresponding number.`);
                         this.playerStates.set(msg.author.id, "Destroying Leggings");
                     }
                     else if (str.startsWith('boots')) {
-                        this.displayBoots(msg);
+                        if (this.displayBoots(msg) == "none") {
+                            this.playerStates.delete(msg.author.id);
+                            return;
+                        }
                         msg.channel.send(`${msg.author.username}, which Boots would you like to destroy? Respond with the correstponding number.`);
                         this.playerStates.set(msg.author.id, "Destroying Boots");
                     }
@@ -849,7 +903,7 @@ class Minecraft {
     }
     displayPicks(msg) {
         this.load();
-        this.saveData.players.forEach((player) => {
+        for (const player of this.saveData.players) {
             if (player.id === msg.author.id) {
                 if (player.inventory.picks.length === 0 && player.inventory.cobblestone < 3 && player.inventory.iron_ingot < 3 && player.inventory.diamond < 3 && player.inventory.gold_ingot < 3 && (player.inventory.coal === 0 || (player.inventory.iron_ore < 3 && player.inventory.gold_ore < 3))) {
                     //Case where you make and delete picks until you cant make new picks
@@ -863,6 +917,7 @@ class Minecraft {
                 }
                 else if (player.inventory.picks.length === 0) {
                     msg.channel.send(`${msg.author.username}, you don't have any pickaxes! Go craft some!`);
+                    return "none";
                 }
                 else {
                     let text = `${msg.author.username}'s picks:\n`;
@@ -879,14 +934,15 @@ class Minecraft {
                     msg.channel.send(text);
                 }
             }
-        });
+        };
     }
     displaySwords(msg) {
         this.load();
-        this.saveData.players.forEach((player) => {
+        for (const player of this.saveData.players) {
             if (player.id === msg.author.id) {
                 if (player.inventory.swords.length === 0) {
                     msg.channel.send(`${msg.author.username}, you don't have any swords! Go craft some!`);
+                    return "none";
                 }
                 else {
                     let text = `${msg.author.username}'s swords:\n`;
@@ -908,14 +964,15 @@ class Minecraft {
                     msg.channel.send(text);
                 }
             }
-        });
+        };
     }
     displayHelmets(msg) {
         this.load();
-        this.saveData.players.forEach((player) => {
+        for (const player of this.saveData.players) {
             if (player.id === msg.author.id) {
                 if (player.inventory.helmets.length === 0) {
                     msg.channel.send(`${msg.author.username}, you dont have any helmets! Go craft some!`);
+                    return "none";
                 }
                 else {
                     let text = `${msg.author.username}'s helmets:\n`;
@@ -937,14 +994,15 @@ class Minecraft {
                     msg.channel.send(text);
                 }
             }
-        });
+        };
     }
     displayChestplates(msg) {
         this.load();
-        this.saveData.players.forEach((player) => {
+        for (const player of this.saveData.players) {
             if (player.id === msg.author.id) {
                 if (player.inventory.chestplates.length === 0) {
                     msg.channel.send(`${msg.author.username}, you don't have any chestplates! Go craft some!`);
+                    return "none";
                 }
                 else {
                     let text = `${msg.author.username}'s chestplates:\n`;
@@ -966,14 +1024,15 @@ class Minecraft {
                     msg.channel.send(text);
                 }
             }
-        });
+        };
     }
     displayLeggings(msg) {
         this.load();
-        this.saveData.players.forEach((player) => {
+        for (const player of this.saveData.players) {
             if (player.id === msg.author.id) {
                 if (player.inventory.leggings.length === 0) {
                     msg.channel.send(`${msg.author.username}, you dont have any leggings! Go craft some!`);
+                    return "none";
                 }
                 else {
                     let text = `${msg.author.username}'s leggings:\n`;
@@ -995,14 +1054,15 @@ class Minecraft {
                     msg.channel.send(text);
                 }
             }
-        });
+        };
     }
     displayBoots(msg) {
         this.load();
-        this.saveData.players.forEach((player) => {
+        for (const player of this.saveData.players) {
             if (player.id === msg.author.id) {
                 if (player.inventory.boots.length === 0) {
                     msg.channel.send(`${msg.author.username}, you don't have any boots! Go craft some!`);
+                    return "none";
                 }
                 else {
                     let text = `${msg.author.username}'s boots:\n`;
@@ -1024,7 +1084,7 @@ class Minecraft {
                     msg.channel.send(text);
                 }
             }
-        });
+        };
     }
     displayItems(msg) {
         this.load();
