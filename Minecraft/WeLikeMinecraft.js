@@ -1214,9 +1214,9 @@ class Minecraft {
                         if (enchant.startsWith(enchantType.type)) {
                             enchantType.levels.forEach((level) => {
                                 if (level.type === enchant) {
-                                    blocks2Mine *= possible_enchant.durabilityMod;
-                                    treasureMod *= possible_enchant.treasureMod;
-                                    speed *= possible_enchant.speedMod;
+                                    blocks2Mine *= level.durabilityMod;
+                                    treasureMod *= level.treasureMod;
+                                    speed *= level.speedMod;
                                 }
                             });
                         }
